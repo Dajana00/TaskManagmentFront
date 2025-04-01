@@ -1,0 +1,48 @@
+/* Board.css */
+.board-container {
+    padding: 20px;
+    flex-grow: 1; /* Tabla zauzima preostali prostor */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.board {
+    display: flex;
+    gap: 15px; /* Razmak između kolona */
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: auto;
+}
+.h2{
+    margin-bottom: 20px;
+    
+}
+.board-column {
+    flex: 1;
+    min-width: 250px;
+    background-color: rgb(240, 241, 241);;
+    backdrop-filter: blur(60px);
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 80vh; /* Ograničena visina */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.board-column h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    background-color:rgb(138, 126, 249);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.task-list {
+    flex-grow: 1; /* Omogućava taskovima da popune prostor */
+    padding: 5px;
+    overflow-y: auto; /* Omogućava skrolovanje ako ima puno taskova */
+    min-height: 50px;
+}
