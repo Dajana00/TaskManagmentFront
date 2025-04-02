@@ -1,5 +1,8 @@
+import { Card } from "./Card";
+
 export interface Column {
     id: number;
     name: string;
-    boardId: number
+    boardId: number,
+    cards: Card[]
 }

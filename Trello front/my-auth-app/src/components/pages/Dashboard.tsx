@@ -24,6 +24,7 @@ const Dashboard = () => {
     const openBoard = (projectId: number) => {
         setSelectedProject(projectId);
         console.log("selected project board id: ", projectId);
+        localStorage.setItem("selectedProject", projectId.toString()); // Sačuvaj u localStorage
         setOpenDropdown(null); // Zatvaramo meni
     };
     
@@ -41,6 +42,11 @@ const Dashboard = () => {
                        console.log("User projects:", userProjects);
                         setProjects(userProjects);
                     }
+                    // Postavi selektovani projekt iz localStorage-a
+                const savedProject = localStorage.getItem("selectedProject");
+                if (savedProject) {
+                    setSelectedProject(Number(savedProject)); // Vraća selektovani projekt
+                }
                 } catch (error) {
                     console.error("Error fetching user or projects:", error);
                 }

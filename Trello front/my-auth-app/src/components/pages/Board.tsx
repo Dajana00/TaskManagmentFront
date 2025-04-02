@@ -1,49 +1,71 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./Board.css";
-import { Board as BoardType } from "../../types/Board";
-import { getBoardById } from "../../services/BoardService";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { fetchBoardById } from "../../redux/BoardSlice"; // Import Redux thunks
+import { moveCard } from "../../redux/CardSlice";
+import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
+import CardComponent from "../pages/Card";
 
 interface BoardProps {
-    boardId: number;
+  boardId: number;
 }
 
 const Board: React.FC<BoardProps> = ({ boardId }) => {
-    const [board, setBoard] = useState<BoardType | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const board = useSelector((state: RootState) => state.board.board);
+  const status = useSelector((state: RootState) => state.board.status);
+  console.log('Board iz Reduxa:', board); 
 
-    useEffect(() => {
-        const fetchBoard = async () => {
-            try {
-                const fetchedBoard = await getBoardById(boardId);
-                setBoard(fetchedBoard);
-            } catch (error) {
-                console.error("Failed to fetch board:", error);
-            }
-        };
+  useEffect(() => {
+    dispatch(fetchBoardById(boardId));
+  }, [dispatch, boardId]);
 
-        fetchBoard();
-    }, [boardId]);
+  const handleDragEnd = async (result: DropResult) => {
+    const { source, destination } = result;
 
-    return (
-        <div className="board-container">
-            {board ? (
-                <>
-                    <h2 className="h2">{board.name} - Board</h2>
-                    <div className="board">
-                        {board.columns.map((column) => (
-                            <div key={column.id} className="board-column">
-                                <h3>{column.name}</h3>
-                                <div className="task-list">
-                                    {/* Ova sekcija će se koristiti za prikaz taskova */}
-                                </div>
-                            </div>
+    if (!destination || !board) return;
+    
+  const cardId = Number(result.draggableId);
+  const columnId = Number(destination.droppableId);
+ // Optimistički update: odmah ažuriraj UI
+    dispatch(moveCard({ cardId, columnId }));
+
+ // Zatim pozovi akciju koja ažurira server
+    await dispatch(moveCard({ cardId, columnId }));
+    //await dispatch(moveCard({ cardId: Number(result.draggableId), columnId: Number(destination.droppableId) }));
+  };
+
+  return (
+    <div className="board-container">
+      {status === "loading" ? (
+        <p>Loading board...</p>
+      ) : (
+        <>
+          <h2 className="h2">{board?.name} - Board</h2>
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <div className="board">
+              {board?.columns.map((column) => (
+                <Droppable key={column.id} droppableId={column.id.toString()}>
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps} className="board-column">
+                      <h3>{column.name}</h3>
+                      <div className="task-list">
+                        {column.cards.map((card, index) => (
+                          <CardComponent key={card.id} card={card} index={index} />
                         ))}
+                        {provided.placeholder}
+                      </div>
                     </div>
-                </>
-            ) : (
-                <p>Loading board...</p>
-            )}
-        </div>
-    );
+                  )}
+                </Droppable>
+              ))}
+            </div>
+          </DragDropContext>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default Board;
