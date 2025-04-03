@@ -1,51 +1,47 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Card } from "../types/Card";
-import { updateCardColumn } from "../services/CardService";
 
-interface MoveCardPayload {
-  cardId: number;
-  columnId: number;
-}
+const API_URL = "https://your-api-url.com/cards";
 
-interface CardState {
-  cards: Card[];
-  status: "idle" | "loading" | "failed";
-  error: string | null;
-}
-
-const initialState: CardState = {
-  cards: [],
-  status: "idle",
-  error: null,
-};
-
-export const moveCard = createAsyncThunk(
-  "cards/moveCard",
-  async ({ cardId, columnId }: MoveCardPayload, { rejectWithValue }) => {
+// Thunk za kreiranje kartice
+export const addNewCard = createAsyncThunk(
+  "cards/addNewCard",
+  async (card: Omit<Card, "id">, { rejectWithValue }) => {
     try {
-      const response = updateCardColumn(cardId,columnId);
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Error moving card");
+      const token = localStorage.getItem("token");
+      const response = await axios.post<Card>(`${API_URL}/create`, card, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue("Failed to create card");
     }
   }
 );
 
 const cardSlice = createSlice({
   name: "cards",
-  initialState,
+  initialState: {
+    cards: [] as Card[],
+    status: "idle",
+    error: null as string | null,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(moveCard.fulfilled, (state, action: PayloadAction<MoveCardPayload>) => {
-        const { cardId, columnId } = action.payload;
-        const card = state.cards.find((c) => c.id === cardId);
-        if (card) {
-          card.columnId = columnId;
-        }
+      .addCase(addNewCard.pending, (state) => {
+        state.status = "loading";
       })
-      .addCase(moveCard.rejected, (state, action) => {
+      .addCase(addNewCard.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.cards.push(action.payload);
+      })
+      .addCase(addNewCard.rejected, (state, action) => {
+        state.status = "failed";
         state.error = action.payload as string;
       });
   },

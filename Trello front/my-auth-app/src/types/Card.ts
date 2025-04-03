@@ -4,6 +4,5 @@ export interface Card{
     title:string,
     description: string,
     dueDate: Date,
-    columnId: number
 
 } 
