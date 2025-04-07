@@ -1,0 +1,41 @@
+/* Card.css */
+.card {
+    background-color: white;
+    
+    border-radius: 8px; /* Zaobljene ivice */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Senka oko kartice */
+    padding: 15px; /* Unutrašnji razmak */
+    margin-bottom: 10px; /* Razmak između kartica */
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s ease-in-out;
+    position: relative; /* Dodaj ovo da bi imala pozicioniranje */
+    z-index: 1; /* Početni z-index */
+  }
+ 
+  .card:active {
+    z-index: 99999; /* Povećaj z-index dok je kartica aktivna za draging */
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Senka prilikom hover-a */
+  }
+  
+  .card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .card p {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  .card small {
+    font-size: 0.8rem;
+    color: #888;
+    display: block;
+    margin-top: 10px;
+  }
+  
