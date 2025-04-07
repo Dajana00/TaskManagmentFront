@@ -20,3 +20,21 @@ export const createUserStory = async (card: Omit<UserStory, "id">): Promise<User
         throw new Error("Failed to create UserStory");
     }
 };
+
+export const getByBacklogId = async (backlogId: number): Promise<UserStory[]> => {
+    try {
+        const token = localStorage.getItem("token");  
+
+        const response = await axios.get<UserStory[]>(API_URL+'/getByBacklogId/'+ backlogId, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, 
+            },
+        });
+
+        return response.data; 
+    } catch (error) {
+        console.error("Failed to get UserStory by backlogId:", error);
+        throw new Error("Failed to get UserStory by backlogId");
+    }
+};

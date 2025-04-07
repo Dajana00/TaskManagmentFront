@@ -14,7 +14,6 @@ const initialState: BoardState = {
   error: null,
 };
 
-// AsyncThunk za dohvat board-a
 export const fetchBoardById = createAsyncThunk("board/fetchBoard", async (boardId: number) => {
   const board = await getBoardById(boardId);
   return board;

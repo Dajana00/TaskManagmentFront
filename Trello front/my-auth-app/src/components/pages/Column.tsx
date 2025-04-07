@@ -1,10 +1,10 @@
 import React from "react";
-import { Card as CardType } from "../../types/Card";
+import { Card as CardType, Status } from "../../types/Card";
 import CardComponent from "./Card";
 
 interface ColumnProps {
   column: { id: number; name: string; cards: CardType[] };
-  onCardDrop: (cardId: number, newColumnId: number) => void;
+  onCardDrop: (cardId: number, newStatus: string) => void;
 }
 
 const Column: React.FC<ColumnProps> = ({ column, onCardDrop }) => {
@@ -24,7 +24,7 @@ const Column: React.FC<ColumnProps> = ({ column, onCardDrop }) => {
     const cardId = e.dataTransfer.getData("cardId");
     if (!cardId) return;
 
-    onCardDrop(Number(cardId), column.id); // Ažuriraj kolonu
+    onCardDrop(Number(cardId), column.name); // Ažuriraj kolonu
   };
 
   return (

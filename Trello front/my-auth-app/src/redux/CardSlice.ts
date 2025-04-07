@@ -1,8 +1,11 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Card } from "../types/Card";
+import { Card, Status } from "../types/Card";
+import { getAll, updateCardColumn } from "../services/CardService";
 
 const API_URL = "https://your-api-url.com/cards";
+
+
 
 // Thunk za kreiranje kartice
 export const addNewCard = createAsyncThunk(
@@ -23,6 +26,31 @@ export const addNewCard = createAsyncThunk(
   }
 );
 
+export const fetchAllCards = createAsyncThunk(
+  "cards/fetchAllCards",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getAll();
+      console.log("Kartoce sa beka: ", response);
+      return response.data; // pod pretpostavkom da response ima data: Card[]
+
+    } catch (error) {
+      return rejectWithValue("Failed to fetch cards");
+    }
+  }
+);
+
+export const moveCardToNewColumn = createAsyncThunk(
+    "cards/moveCardToNewColumn",
+    async ({ cardId, status }: { cardId: number, status: Status }, { rejectWithValue }) => {
+        try {
+            const updatedCard = await updateCardColumn(cardId, status);
+            return updatedCard; // Vraćamo ažuriranu karticu iz odgovora sa backend-a
+        } catch (error) {
+            return rejectWithValue("Failed to move card");
+        }
+    }
+);
 const cardSlice = createSlice({
   name: "cards",
   initialState: {
@@ -30,7 +58,11 @@ const cardSlice = createSlice({
     status: "idle",
     error: null as string | null,
   },
-  reducers: {},
+  reducers: {
+    setCards: (state, action: PayloadAction<Card[]>) => {
+        state.cards = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addNewCard.pending, (state) => {
@@ -43,8 +75,37 @@ const cardSlice = createSlice({
       .addCase(addNewCard.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+      })
+      .addCase(fetchAllCards.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllCards.fulfilled, (state, action: PayloadAction<Card[]>) => {
+        state.status = "succeeded";
+        state.cards = action.payload;
+      })
+      .addCase(fetchAllCards.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(moveCardToNewColumn.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(moveCardToNewColumn.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Ažuriraj status kartice u store-u
+        const updatedCard = action.payload;
+        const cardIndex = state.cards.findIndex(card => card.id === updatedCard.id);
+        if (cardIndex !== -1) {
+          state.cards[cardIndex] = updatedCard; // Zamenjujemo karticu sa novim statusom
+        }
+      })
+      .addCase(moveCardToNewColumn.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
       });
   },
 });
+
+export const { setCards } = cardSlice.actions;
 
 export default cardSlice.reducer;
