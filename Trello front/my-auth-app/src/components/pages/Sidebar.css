@@ -1,0 +1,35 @@
+/* Sidebar sa listom projekata */
+.sidebar {
+    position: fixed; /* Sidebar ostaje fiksiran uz levu ivicu */
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    top: 0;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,.2);
+    backdrop-filter: blur(30px);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.sidebar h3 {
+    margin-bottom: 15px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.project-item {
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.project-item:hover {
+    background-color: #ddd;
+}
