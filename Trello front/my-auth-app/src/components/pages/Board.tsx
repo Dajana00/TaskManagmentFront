@@ -25,7 +25,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
 
   useEffect(() => {
     dispatch(fetchBoardById(boardId));
-    console.log("Redux state: ",kartice); // 👈 vidi ceo state
+    console.log("Redux state: ",kartice); 
 
   }, [dispatch, boardId]);
 
