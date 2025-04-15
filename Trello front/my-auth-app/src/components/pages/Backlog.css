@@ -1,36 +1,45 @@
-
+.flexbox-container {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  justify-content: flex-start;
+}
 .wrapper {
-    width: 420px;
-    height: 500px;
-    margin-left: -350px; /* Pomeraj ulevo */
-    background: transparent;
-    border: 2px solid rgba(255,255,255,.2);
-    backdrop-filter: blur(30px);
-    color: #fff;
-    border-radius: 10px;
-    padding: 30px 40px;
-    box-shadow: 0 0 10px rgba(0,0,0, .2);
-  }
-  form {
+  flex: 0 0 300px; /* Fiksna širina */
+  background: transparent;
+  border: 2px solid rgba(255,255,255,.2);
+  backdrop-filter: blur(30px);
+  color: #fff;
+  border-radius: 10px;
+  padding: 30px 40px;
+  box-shadow: 0 0 10px rgba(0,0,0, .2);
+  margin-left: -170px;
+}
+.form-backlog {
     display: flex;
     flex-direction: column;
-    gap: 2px; /* Povećava razmak između polja */
+    width:200px;
+    height: 450px; 
+    //gap: 1px; /* Povećava razmak između polja */
 }
-  .wrapper h1 {
+.form-spacer {
+  flex-grow: 1;
+}
+ 
+.wrapper h1 {
     font-size: 36px;
     text-align: center;
   }
-  .wrapper .input-box {
-    margin-bottom: 60px; /* Veći razmak između input polja */
-
+.wrapper .input-box {
+    margin-bottom: 0px;
     position: relative;
     width: 100%;
-    height: 50px;
+    height: 150px;
   }
   
-  .input-box input{
+.input-box input{
     width:100%;
-    height:100%;
+    height:150%;
     background:transparent;
     border: 2px solid rgba(255,255,255, .2);
     outline: none;
@@ -38,25 +47,26 @@
     border-radius:40px;
     font-size:16px;
     color :#fff;
-    padding: 20px 45px 20px 45px;
+    padding: 0px 5px 0px 5px;
   }
   
-  .input-box input::placeholder{
+.input-box input::placeholder{
     color : #fff;
   
   }
   
-  .input-box .icon{
+.input-box .icon{
     position:absolute;
     right: 20px;
     top:50%;
     transform: translateY(-50%);
     font-size:16px;
+    height: auto; 
   
   }
   
-  .wrapper button{
-  
+.wrapper button{
+
     width:100%;
     height:45px;
     background:#fff;
@@ -67,38 +77,147 @@
     cursor: pointer;
     font-size: 16px;
     color: #333;
-    margin-top: 70px;
-    font-weight: 700;
+    margin-top: -30px;
+    font-weight: 0;
   }
-  .button: hover{
+.button: hover{
     
   }
   
-  .wrapper .register-link{
+.wrapper .register-link{
     font-size: 14.5px;
     text-align: center;
     margin: 40px 0 15px;
   }
-  .register-link p a{
+.register-link p a{
     color: #fff;
     text-decoration : none;
     font-weight: 600;
     margin-top: 40px;
-  }
+}
   
-  .register-link p a: hover{
+.register-link p a: hover{
     text-decoration: underline;
-  }
+}
   
   /* Onemogućeno dugme */
-  .button.disabled {
+.button.disabled {
     background: gray;
     cursor: not-allowed;
-  }
+}
   
   /* Prikaz grešaka */
-  .error-message {
+.error-message {
     color: red;
     font-size: 14px;
     margin-top: 5px;
   }
+
+  /* Stilovi za prikaz liste user story-ja */
+.userstory-list {
+  gap:5px;
+}
+
+.userstory-list ul {
+  list-style-type: none;
+  padding: 10;
+  margin: 10;
+}
+
+.userstory-list li {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  border-left: 5px solid #007BFF;
+  transition: transform 0.3s ease;
+  margin:10px;
+}
+
+.userstory-list li:hover {
+  transform: translateY(-5px);
+}
+.userstory-section {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+/* Stil za kartice user story-ja */
+.userstory-list li strong {
+  display: block;
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.userstory-list li p {
+  color: #555;
+}
+.textarea-field {
+  margin-top: -5px;
+  width: 100%;
+  height: 200px; /* ili više ako želiš */
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  outline: none;
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px;
+  resize: none; /* ako ne želiš da user menja veličinu */
+  margin-button: 0px;
+  gap: 2px;
+}
+.textarea-field::placeholder {
+  color: #fff;
+}
+
+
+/* Stil za praznu listu user story-ja */
+.userstory-list p {
+  font-size: 1.1rem;
+  color: #999;
+}
+
+/* Responsivni dizajn */
+@media (max-width: 900px) {
+  .wrapper {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .form-wrapper {
+      width: 80%;  
+  }
+
+  .userstory-list {
+      width: 100%; 
+  }
+}
+
+.userstory-item {
+  cursor: pointer;
+  padding: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.userstory-item.selected {
+  background-color: #e6f7ff;
+  font-weight: bold;
+}
+.show-task-form-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.show-task-form-btn:hover {
+  background-color: #1d4ed8;
+}

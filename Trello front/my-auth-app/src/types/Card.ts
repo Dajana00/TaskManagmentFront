@@ -1,5 +1,6 @@
 
 export enum Status {
+    Backlog = "Backlog",
     ToDo = "ToDo",
     InProgress = "InProgress",
     QA = "QA",
@@ -13,5 +14,6 @@ export interface Card{
     title:string,
     description: string,
     dueDate: Date,
-    status: Status
+    status: Status,
+    userStoryId: number
 } 

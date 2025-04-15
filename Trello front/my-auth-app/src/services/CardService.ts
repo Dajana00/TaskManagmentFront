@@ -20,17 +20,17 @@ export const createCard = async (card: Omit<Card, "id">): Promise<Card> => {
         throw new Error("Failed to create card");
     }
 };
-export const updateCardColumn = async (cardId: number, status: Status) => {
+export const updateCardColumn = async (cardId: number, newStatus: string) => {
     try {
         const token = localStorage.getItem("token"); 
-        // Poslati oba parametra (cardId i columnId) kao objekat u PUT request
+        console.log("Prosledjeni status u service: ",newStatus);
         const response = await axios.put(`${API_URL}/move`, { 
             cardId: cardId, 
-            status: status 
+            newStatus: newStatus 
         },
     {  headers: { Authorization: `Bearer ${token}` },});
         console.log("Odgovor kada udje u metodu updateCardColumn:",response);
-        return response.data; // Ako je potrebno, možeš obraditi odgovor od servera
+        return response.data;
     } catch (error) {
         console.error("Failed to update card column:", error);
     }
@@ -40,12 +40,22 @@ export const updateCardColumn = async (cardId: number, status: Status) => {
 export const getAll = async () => {
     try {
         const token = localStorage.getItem("token"); 
-        // Poslati oba parametra (cardId i columnId) kao objekat u PUT request
         const response = await axios.get(`${API_URL}/getAll`,
     {  headers: { Authorization: `Bearer ${token}` },});
         console.log("Odgovor kada udje u metodu GetALl:",response);
-        return response.data; // Ako je potrebno, možeš obraditi odgovor od servera
+        return response.data; 
     } catch (error) {
         console.error("Failed to get all cards:", error);
+    }
+};
+export const getByUserStoryId = async (userStoryId: number) => {
+    try {
+        const token = localStorage.getItem("token"); 
+        const response = await axios.get(`${API_URL}/getByUserStoryId/`+ userStoryId,
+    {  headers: { Authorization: `Bearer ${token}` },});
+        console.log("Odgovor kada udje u metodu getByUserStoryId:",response);
+        return response.data; 
+    } catch (error) {
+        console.error("Failed to get by user story id:", error);
     }
 };

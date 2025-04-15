@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction, AsyncThunkAction, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Card, Status } from "../types/Card";
 import { getAll, updateCardColumn } from "../services/CardService";
@@ -42,9 +42,10 @@ export const fetchAllCards = createAsyncThunk(
 
 export const moveCardToNewColumn = createAsyncThunk(
     "cards/moveCardToNewColumn",
-    async ({ cardId, status }: { cardId: number, status: Status }, { rejectWithValue }) => {
+    async ({ cardId, newStatus }: { cardId: number, newStatus: string }, { rejectWithValue }) => {
         try {
-            const updatedCard = await updateCardColumn(cardId, status);
+            const updatedCard = await updateCardColumn(cardId, newStatus);
+            dispatch(fetchAllCards());
             return updatedCard; // Vraćamo ažuriranu karticu iz odgovora sa backend-a
         } catch (error) {
             return rejectWithValue("Failed to move card");
@@ -92,13 +93,13 @@ const cardSlice = createSlice({
       })
       .addCase(moveCardToNewColumn.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // Ažuriraj status kartice u store-u
         const updatedCard = action.payload;
         const cardIndex = state.cards.findIndex(card => card.id === updatedCard.id);
         if (cardIndex !== -1) {
-          state.cards[cardIndex] = updatedCard; // Zamenjujemo karticu sa novim statusom
+          state.cards[cardIndex] = updatedCard; // Ažuriraj karticu sa novim statusom
         }
       })
+      
       .addCase(moveCardToNewColumn.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
@@ -109,3 +110,7 @@ const cardSlice = createSlice({
 export const { setCards } = cardSlice.actions;
 
 export default cardSlice.reducer;
+function dispatch(arg0: AsyncThunkAction<any, void, { state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction>; extra?: unknown; rejectValue?: unknown; serializedErrorType?: unknown; pendingMeta?: unknown; fulfilledMeta?: unknown; rejectedMeta?: unknown; }>) {
+  throw new Error("Function not implemented.");
+}
+

@@ -1,99 +1,96 @@
-
-.wrapper {
+.auth-wrapper {
   width: 420px;
   background: transparent;
-  border: 2px solid rgba(255,255,255,.2);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(30px);
   color: #fff;
   border-radius: 10px;
   padding: 30px 40px;
-  box-shadow: 0 0 10px rgba(0,0,0, .2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  height: 500px;
 }
-.wrapper h1 {
+
+.auth-wrapper h1 {
   font-size: 36px;
   text-align: center;
-
-
 }
-.wrapper .input-box {
-  
+
+.auth-container .auth-input-box {
   position: relative;
   width: 100%;
   height: 50px;
-  //background: salmon;
   margin: 30px 0;
+  
 }
 
-.input-box input{
-  width:100%;
-  height:100%;
-  background:transparent;
-  border: 2px solid rgba(255,255,255, .2);
+.auth-input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
   outline: none;
-  
-  border-radius:40px;
-  font-size:16px;
-  color :#fff;
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
   padding: 20px 45px 20px 45px;
 }
 
-.input-box input::placeholder{
-  color : #fff;
-
+.auth-input-box input::placeholder {
+  color: #fff;
 }
 
-.input-box .icon{
-  position:absolute;
+.auth-input-box .auth-icon {
+  position: absolute;
   right: 20px;
-  top:50%;
+  top: 60%;
   transform: translateY(-50%);
-  font-size:16px;
-
+  font-size: 16px;
 }
 
-.wrapper button{
-
-  width:100%;
-  height:45px;
-  background:#fff;
-  broder: none;
-  outline:none;
-  margin-top: 20px;
-  border-radius:40px;
-  box-shadow:0 0 10px rgba(0, 0, 0, .1);
+.auth-container .auth-button {
+  width: 100%;
+  height: 45px;
+  background: #fff;
+  border: none;
+  outline: none;
+  margin-top: 40px;
+  border-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   font-size: 16px;
   color: #333;
   font-weight: 700;
 }
-.button: hover{
-  
+
+.auth-button:hover {
+  background: #f0f0f0;
 }
 
-.wrapper .register-link{
+.auth-container .auth-register-link {
   font-size: 14.5px;
   text-align: center;
-  margin: 40px 0 15px;
-}
-.register-link p a{
-  color: #fff;
-  text-decoration : none;
-  font-weight: 600;
-  margin-top: 40px;
+  //margin: 80px 50px 85px;
 }
 
-.register-link p a: hover{
+.auth-register-link p a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 80px;
+}
+
+.auth-register-link p a:hover {
   text-decoration: underline;
 }
 
 /* Onemogućeno dugme */
-.button.disabled {
+.auth-button.disabled {
   background: gray;
   cursor: not-allowed;
 }
 
 /* Prikaz grešaka */
-.error-message {
+.auth-error-message {
   color: red;
   font-size: 14px;
   margin-top: 5px;
