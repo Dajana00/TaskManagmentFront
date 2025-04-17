@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { addUserStory, setUserStories } from "../../redux/UserStorySlice";
+import { addUserStory, setUserStories , resetUserStories} from "../../redux/UserStorySlice";
 import { UserStory } from "../../types/UserStory";
 import { useForm } from "../../hooks/useForm";
 import InputField from "../common/InputField";
@@ -47,12 +47,9 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
     
         try {
             await dispatch(addUserStory(newStory)).unwrap();
-    
-            // odmah osveži sve iz baze
             const updatedStories = await getByBacklogId(backlogId);
             dispatch(setUserStories(updatedStories));
     
-            // resetuj formu
             values.title = "";
             values.description = "";
         } catch (err) {
@@ -64,8 +61,9 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
     useEffect(() => {
         const fetchUserStories = async () => {
             try {
+                dispatch(resetUserStories());
                 const stories = await getByBacklogId(backlogId);
-                dispatch(setUserStories(stories)); // <-- postavi ih u Redux
+                dispatch(setUserStories(stories));
             } catch (err) {
                 console.error("Failed to fetch stories", err);
             }

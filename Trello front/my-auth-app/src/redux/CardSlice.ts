@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction, AsyncThunkAction, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Card, Status } from "../types/Card";
-import { getAll, updateCardColumn } from "../services/CardService";
+import { getAll, updateCardColumn, createCard } from "../services/CardService";
 
 const API_URL = "https://your-api-url.com/cards";
 
@@ -12,14 +12,8 @@ export const addNewCard = createAsyncThunk(
   "cards/addNewCard",
   async (card: Omit<Card, "id">, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.post<Card>(`${API_URL}/create`, card, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
+      const response = await createCard(card);
+      return response;
     } catch (error) {
       return rejectWithValue("Failed to create card");
     }
@@ -45,7 +39,7 @@ export const moveCardToNewColumn = createAsyncThunk(
     async ({ cardId, newStatus }: { cardId: number, newStatus: string }, { rejectWithValue }) => {
         try {
             const updatedCard = await updateCardColumn(cardId, newStatus);
-            dispatch(fetchAllCards());
+            //dispatch(fetchAllCards());
             return updatedCard; // Vraćamo ažuriranu karticu iz odgovora sa backend-a
         } catch (error) {
             return rejectWithValue("Failed to move card");
@@ -91,26 +85,30 @@ const cardSlice = createSlice({
       .addCase(moveCardToNewColumn.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(moveCardToNewColumn.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        const updatedCard = action.payload;
-        const cardIndex = state.cards.findIndex(card => card.id === updatedCard.id);
-        if (cardIndex !== -1) {
-          state.cards[cardIndex] = updatedCard; // Ažuriraj karticu sa novim statusom
-        }
-      })
-      
+   
       .addCase(moveCardToNewColumn.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+      })
+      .addCase(moveCardToNewColumn.fulfilled, (state, action) => {
+        state.status = "succeeded";
+      
+        const { cardId, newStatus } = action.meta.arg;
+      
+        const cardIndex = state.cards.findIndex(card => card.id === cardId);
+        if (cardIndex !== -1) {
+          state.cards[cardIndex] = {
+            ...state.cards[cardIndex],
+            status: newStatus as Status 
+          };
+        }
       });
+      
   },
 });
 
 export const { setCards } = cardSlice.actions;
 
 export default cardSlice.reducer;
-function dispatch(arg0: AsyncThunkAction<any, void, { state?: unknown; dispatch?: ThunkDispatch<unknown, unknown, UnknownAction>; extra?: unknown; rejectValue?: unknown; serializedErrorType?: unknown; pendingMeta?: unknown; fulfilledMeta?: unknown; rejectedMeta?: unknown; }>) {
-  throw new Error("Function not implemented.");
-}
+
 

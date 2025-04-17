@@ -6,14 +6,15 @@ import { useAuth } from "../../utils/AuthContext";
 import Board from "./Board";
 import Sidebar from "./Sidebar"; // Import Sidebar component
 import Backlog from "./Backlog";
+import SprintsPage from "./Sprints";
 
 const Dashboard = () => {
     const { user, setUser } = useAuth();
     const [projects, setProjects] = useState<Project[]>([]);
     const [newProjectName, setNewProjectName] = useState("");
     const [creatingProject, setCreatingProject] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<number | null>(null);
-    const [viewMode, setViewMode] = useState<"board" | "backlog">("board"); // Dodajemo stanje za switch
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const [viewMode, setViewMode] = useState<"board" | "backlog" | "sprints">("board"); // Dodajemo stanje za switch
 
 
     useEffect(() => {
@@ -31,8 +32,14 @@ const Dashboard = () => {
                     
                     const savedProject = localStorage.getItem("selectedProject");
                     if (savedProject) {
-                        setSelectedProject(Number(savedProject));
+                        try {
+                            const parsedProject = JSON.parse(savedProject);
+                            setSelectedProject(parsedProject);
+                        } catch (e) {
+                            console.error("Invalid project in localStorage", e);
+                        }
                     }
+                    
                 } catch (error) {
                     console.error("Error fetching user or projects:", error);
                 }
@@ -50,23 +57,27 @@ const Dashboard = () => {
             setProjects((prevProjects) => [...prevProjects, newProject]);
             setNewProjectName("");
             setCreatingProject(false);
+            //openBoard(newProject.id); 
         } catch (error) {
             console.error("Error creating project:", error);
         }
     };
+const openBoard = (project: Project) => {
+    setSelectedProject(project);
+    localStorage.setItem("selectedProject", JSON.stringify(project));
+    setViewMode("board");
+};
 
-    const openBoard = (projectId: number) => {
-        setSelectedProject(projectId);
-        localStorage.setItem("selectedProject", projectId.toString());
-        setViewMode("board"); // Postavi da prikazuje Backlog
-
-    };
-    const openBacklog = (projectId: number) => {
-        setSelectedProject(projectId);
-        localStorage.setItem("selectedProject", projectId.toString());
-        setViewMode("backlog"); // Postavi da prikazuje Backlog
-
-    };
+const openBacklog = (project: Project) => {
+    setSelectedProject(project);
+    localStorage.setItem("selectedProject", JSON.stringify(project));
+    setViewMode("backlog");
+};
+const openSprints = (project: Project) => {
+    setSelectedProject(project);
+    localStorage.setItem("selectedProject", JSON.stringify(project));
+    setViewMode("sprints");
+};
     return (
         <div className="dashboard-container">
             <Sidebar
@@ -78,19 +89,23 @@ const Dashboard = () => {
                 handleCreateProject={handleCreateProject}
                 openBoard={openBoard}
                 openBacklog={openBacklog}
+                openSprints={openSprints}
             />
 
-                <div className="main-content">
-                {selectedProject ? (
-                    viewMode === "board" ? (
-                        <Board boardId={selectedProject} />
-                    ) : (
-                        <Backlog backlogId={selectedProject} /> // Prikazivanje Backlog-a
-                    )
-                ) : (
-                    <h2>Welcome to Dashboard</h2>
-                )}
-            </div>
+    <div className="main-content">
+        {selectedProject ? (
+            viewMode === "board" ? (
+                <Board boardId={selectedProject.boardId} />
+            ) : viewMode === "backlog" ? (
+                <Backlog backlogId={selectedProject.backlogId} />
+            ) : viewMode === "sprints" ? (
+                <SprintsPage key={selectedProject.id} projectId={selectedProject.id} />
+            ) : null
+        ) : (
+            <h2>Welcome to Dashboard</h2>
+        )}
+    </div>
+
         </div>
     );
 };

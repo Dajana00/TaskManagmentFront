@@ -21,7 +21,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
   const board = useSelector((state: RootState) => state.board.board);
   const kartice = useSelector((state: RootState) => state.card.cards);
   const cards = useSelector((state: RootState) => state.card.cards); 
-  const [columns, setColumns] = useState(board?.columns || []);
+
 
   useEffect(() => {
     dispatch(fetchBoardById(boardId));
@@ -29,32 +29,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
 
   }, [dispatch, boardId]);
 
-
-  useEffect(() => {
-    const connection = new HubConnectionBuilder()
-    .withUrl("http://localhost:5196/cardHub")
-    .withAutomaticReconnect()
-    .build();
   
-  
-    connection
-      .start()
-      .then(() => console.log("Connected to SignalR"))
-      .catch((err) => console.error("SignalR connection error:", err));
-  
-    connection.on("CardMoved", (cardId: number, newStatus: string) => {
-      console.log(`📩 Card ${cardId} moved to ${newStatus}`);
-      fetchAllCards();
-    });
-  
-    return () => {
-      connection.stop();
-    };
-  }, [dispatch]);
-  
-
-  
-
    useEffect(() => {
         const fetchAllCards = async () => {
             try {
@@ -91,8 +66,8 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         .unwrap()
         .then(() => {
           console.log("Kartica premestena u novu kolonu!");
-          dispatch(fetchAllCards()); // ovo ažurira Redux store i osvežava prikaz
-
+         // dispatch(fetchAllCards()); 
+          
         })
         .catch((err) => {
           console.error("Greška pri premještanju kartice: ", err);
