@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { addNewSprint, fetchByProjectId, resetSprints, setSprints } from "../../redux/SprintSlice";
+import { activateSprintById, addNewSprint, fetchByProjectId, resetSprints, setSprints } from "../../redux/SprintSlice";
 import { Sprint, SprintStatus } from "../../types/Sprint";
 import { getByProjectId } from "../../services/SprintService";
-import { parseJsonText } from "typescript";
 
 
 interface SprintProps {
@@ -19,7 +18,6 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
 
-    // Fetch sprints on component mount
     useEffect(() => {
         dispatch(resetSprints());
         const fetchSprints = async () => {
@@ -54,7 +52,17 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
         setEndDate("");
     };
     
-
+    const handleActivateSprint = async (sprintId: number) => {
+        try {
+            console.log("Usao u handle: ", sprintId)
+            await dispatch(activateSprintById(sprintId)).unwrap();
+            dispatch(fetchByProjectId(projectId)); 
+        } catch (err: any) {
+            alert(err+ " Check if you have already active sprint!"); 
+            
+        }
+      };
+      
     return (
         <div className="sprint-page">
             <h2>Sprints</h2>
@@ -89,8 +97,12 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
                     {new Date(sprint.startDate).toLocaleDateString()} - 
                     {new Date(sprint.endDate).toLocaleDateString()}
                           ) - {sprint.status}
+                          <button onClick={() => handleActivateSprint(sprint.id)} disabled={sprint.status === SprintStatus.Active}>
+                    {sprint.status === SprintStatus.Active ? "Active" : "Activate"}
+                    </button>
                     </li>
                 ))}
+                
             </ul>
         </div>
     );

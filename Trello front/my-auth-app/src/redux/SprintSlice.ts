@@ -1,10 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction, AsyncThunkAction, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Sprint, SprintStatus } from "../types/Sprint";
-import { createSprint, getByProjectId } from "../services/SprintService";
+import {activateSprint, createSprint, getByProjectId } from "../services/SprintService";
 
-
-// Thunk za kreiranje kartice
 export const addNewSprint = createAsyncThunk(
   "sprint/addNewSprint",
   async (sprint: Omit<Sprint, "id">, { rejectWithValue }) => {
@@ -31,6 +29,19 @@ export const fetchByProjectId = createAsyncThunk(
   }
 );
 
+export const activateSprintById = createAsyncThunk(
+  "sprints/activate",
+  async (sprintId: number, { rejectWithValue }) => {
+    try {
+      console.log("Slice za akticaciju: ", sprintId)
+      const response = await activateSprint(sprintId);
+      return response; 
+
+    } catch (error) {
+      return rejectWithValue("Failed to activate sprint");
+    }
+  }
+);
 const sprintSlice = createSlice({
   name: "sprints",
   initialState: {

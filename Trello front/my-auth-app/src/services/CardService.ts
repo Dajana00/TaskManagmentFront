@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Card, Status } from "../types/Card";
+import { Card } from "../types/Card";
 
 const API_URL = process.env.REACT_APP_API_URL + "/card";  
 
@@ -37,10 +37,10 @@ export const updateCardColumn = async (cardId: number, newStatus: string) => {
 };
 
 
-export const getAll = async () => {
+export const getByBoardId = async (boardId: number) => {
     try {
         const token = localStorage.getItem("token"); 
-        const response = await axios.get(`${API_URL}/getAll`,
+        const response = await axios.get(`${API_URL}/getByBoardId/`+boardId,
     {  headers: { Authorization: `Bearer ${token}` },});
         console.log("Odgovor kada udje u metodu GetALl:",response);
         return response.data; 
@@ -57,5 +57,17 @@ export const getByUserStoryId = async (userStoryId: number) => {
         return response.data; 
     } catch (error) {
         console.error("Failed to get by user story id:", error);
+    }
+};
+
+export const addToActiveSprint = async (id: number) => {
+    try {
+        const token = localStorage.getItem("token"); 
+        const response = await axios.put(`${API_URL}/addToActiveSprint/`+ id,
+    {  headers: { Authorization: `Bearer ${token}` },});
+        console.log("Odgovor kada udje u metodu addToActiveSprint:",response);
+        return response.data; 
+    } catch (error) {
+        console.error("Failed to add card to active sprint:", error);
     }
 };

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "../../types/Card";
 import { getByUserStoryId } from "../../services/CardService";
-import "./TaskList.css"; // 👈 dodaj ovaj import
+import "./TaskList.css"; 
+import { addToBoard, fetchAllCards } from "../../redux/CardSlice";
+import { AppDispatch } from "../../redux/store";
+import { useDispatch } from "react-redux";
 
 interface TaskListProps {
   userStoryId: number;
@@ -9,6 +12,8 @@ interface TaskListProps {
 
 const TaskList: React.FC<TaskListProps> = ({ userStoryId }) => {
   const [tasks, setTasks] = useState<Card[]>([]);
+  const dispatch = useDispatch<AppDispatch>(); 
+
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -18,6 +23,17 @@ const TaskList: React.FC<TaskListProps> = ({ userStoryId }) => {
     fetchTasks();
   }, [userStoryId]);
 
+  const handleAddToSprint = async (cardId: number) => {
+    try {
+      await dispatch(addToBoard(cardId)).unwrap();
+      const updatedTasks = await getByUserStoryId(userStoryId);
+      setTasks(updatedTasks); 
+      console.log("Adding task to sprint:", cardId);
+    } catch (error) {
+      console.error("Error adding task to sprint", error);
+    }
+  };
+  
   return (
     <div className="task-list-container">
       {Array.isArray(tasks) && tasks.length > 0 ? (
@@ -27,6 +43,15 @@ const TaskList: React.FC<TaskListProps> = ({ userStoryId }) => {
               <h3 className="task-title">{task.title}</h3>
               <p className="task-desc">{task.description}</p>
               <p className="task-status">{task.status}</p>
+
+              {task.status === "Backlog" && (
+              <button
+                className="add-to-sprint-btn"
+                onClick={() => handleAddToSprint(task.id)}
+              >
+                Add to Active Sprint
+              </button>
+            )}
             </div>
           ))}
         </div>
@@ -38,3 +63,4 @@ const TaskList: React.FC<TaskListProps> = ({ userStoryId }) => {
 };
 
 export default TaskList;
+

@@ -132,10 +132,7 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
 
     {selectedStory && (
         <div className="task-panel">
-            <h3>Tasks for: {selectedStory.title}</h3>
-            <TaskList userStoryId={selectedStory.id} />
-
-           {!showTaskForm ? (
+            {!showTaskForm ? (
             <button
                 className="show-task-form-btn"
                 onClick={() => setShowTaskForm(true)}
@@ -145,6 +142,8 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
             ) : (
             <TaskForm userStoryId={selectedStory.id} />
             )}
+            <h3>Tasks for: {selectedStory.title}</h3>
+            <TaskList userStoryId={selectedStory.id} />
         </div>
     )}
 </div>

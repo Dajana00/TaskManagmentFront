@@ -39,3 +39,21 @@ export const getByProjectId = async (projectId: number): Promise<Sprint[]> => {
         throw new Error("Failed to featch sprints by projct id:");
     }
 };
+
+export const activateSprint = async (id: number) : Promise<Sprint>=> {
+    try {
+        const token = localStorage.getItem("token");  
+console.log("Usao u metodu za aktivaciji: ", id);
+        const response = await axios.put<Sprint>(API_URL+'/activateSprint/'+ id, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, 
+            },
+        });
+
+        return response.data; 
+    } catch (error) {
+        console.error("Failed to activate sprint", error);
+        throw new Error("Failed to activate sprint");
+    }
+};

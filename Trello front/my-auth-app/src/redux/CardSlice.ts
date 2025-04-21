@@ -1,13 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction, AsyncThunkAction, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
-import axios from "axios";
 import { Card, Status } from "../types/Card";
-import { getAll, updateCardColumn, createCard } from "../services/CardService";
+import { getByBoardId, updateCardColumn, createCard, addToActiveSprint } from "../services/CardService";
 
-const API_URL = "https://your-api-url.com/cards";
-
-
-
-// Thunk za kreiranje kartice
 export const addNewCard = createAsyncThunk(
   "cards/addNewCard",
   async (card: Omit<Card, "id">, { rejectWithValue }) => {
@@ -22,11 +16,11 @@ export const addNewCard = createAsyncThunk(
 
 export const fetchAllCards = createAsyncThunk(
   "cards/fetchAllCards",
-  async (_, { rejectWithValue }) => {
+  async (boardId: number, { rejectWithValue }) => {
     try {
-      const response = await getAll();
+      const response = await getByBoardId(boardId);
       console.log("Kartoce sa beka: ", response);
-      return response.data; // pod pretpostavkom da response ima data: Card[]
+      return response.data;
 
     } catch (error) {
       return rejectWithValue("Failed to fetch cards");
@@ -45,6 +39,18 @@ export const moveCardToNewColumn = createAsyncThunk(
             return rejectWithValue("Failed to move card");
         }
     }
+);
+
+
+export const addToBoard = createAsyncThunk(
+  "cards/addToActiveSprint",
+  async ( cardId: number, { rejectWithValue }) => {
+      try {
+          const updatedCard = await addToActiveSprint(cardId);
+          return Array.isArray(updatedCard) ? updatedCard : [];      } catch (error) {
+          return rejectWithValue("Failed to add card to active spritn");
+      }
+  }
 );
 const cardSlice = createSlice({
   name: "cards",
@@ -102,7 +108,20 @@ const cardSlice = createSlice({
             status: newStatus as Status 
           };
         }
-      });
+      })
+
+      .addCase(addToBoard.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(addToBoard.pending, (state) => {
+        state.status = "loading";
+      })
+   
+      .addCase(addToBoard.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.cards = action.payload;
+      })
       
   },
 });

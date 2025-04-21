@@ -8,7 +8,7 @@ import ColumnComponent from "../pages/Column";
 import {Column} from '../../types/Column'
 import { Card, Status } from "../../types/Card";
 import { fetchAllCards, moveCardToNewColumn, setCards } from "../../redux/CardSlice";
-import { getAll } from "../../services/CardService";
+import { getByBoardId } from "../../services/CardService";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 
 
@@ -33,7 +33,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
    useEffect(() => {
         const fetchAllCards = async () => {
             try {
-                const stories = await getAll();
+                const stories = await getByBoardId(boardId);
                 console.log("ucitane kartice ", stories);
                 dispatch(setCards(stories)); 
             } catch (err) {

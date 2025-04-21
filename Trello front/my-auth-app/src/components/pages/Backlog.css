@@ -204,13 +204,13 @@
 }
 
 .userstory-item.selected {
-  background-color: #e6f7ff;
+  background-color:rgb(147, 196, 218);
   font-weight: bold;
 }
 .show-task-form-btn {
   margin-top: 12px;
   padding: 8px 16px;
-  background-color: #2563eb;
+  background-color:rgb(103, 146, 237);
   color: white;
   border: none;
   border-radius: 8px;
