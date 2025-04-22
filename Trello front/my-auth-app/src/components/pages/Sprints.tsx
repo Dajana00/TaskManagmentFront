@@ -5,7 +5,7 @@ import { activateSprintById, addNewSprint, fetchByProjectId, resetSprints, setSp
 import { Sprint, SprintStatus } from "../../types/Sprint";
 import { getByProjectId } from "../../services/SprintService";
 
-
+import "./Sprints.css"
 interface SprintProps {
     projectId: number;
 }
@@ -78,11 +78,15 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]} 
+
                 />
                 <input
                     type="date"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
+                    min={startDate} 
+                    disabled={!startDate} 
                 />
                 <button type="submit">Add Sprint</button>
             </form>
@@ -92,15 +96,22 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
 
             <ul className="sprint-list">
                 {sprints.map((sprint) => (
-                    <li key={sprint.id}>
-                         <strong>{sprint.name}</strong> (
-                    {new Date(sprint.startDate).toLocaleDateString()} - 
-                    {new Date(sprint.endDate).toLocaleDateString()}
-                          ) - {sprint.status}
-                          <button onClick={() => handleActivateSprint(sprint.id)} disabled={sprint.status === SprintStatus.Active}>
-                    {sprint.status === SprintStatus.Active ? "Active" : "Activate"}
-                    </button>
-                    </li>
+                   <li key={sprint.id}>
+                   <div>
+                     <strong>{sprint.name}</strong>{" "}
+                     <span>
+                       ({new Date(sprint.startDate).toLocaleDateString()} -{" "}
+                       {new Date(sprint.endDate).toLocaleDateString()}) – {sprint.status}
+                     </span>
+                   </div>
+                   <button
+                     onClick={() => handleActivateSprint(sprint.id)}
+                     disabled={sprint.status === SprintStatus.Active}
+                   >
+                     {sprint.status === SprintStatus.Active ? "Active" : "Activate"}
+                   </button>
+                 </li>
+                 
                 ))}
                 
             </ul>

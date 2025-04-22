@@ -3,6 +3,7 @@ import { Status } from "../../types/Card";
 import { createCard } from "../../services/CardService";
 import './TaskForm.css'
 
+
 interface TaskFormProps {
   userStoryId: number;
 }
@@ -21,6 +22,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ userStoryId }) => {
       status: Status.Backlog,
       userStoryId
     });
+
     setTitle("");
     setDescription("");
     setDueDate("");

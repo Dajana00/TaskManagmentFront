@@ -3,13 +3,10 @@ import "./Board.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchBoardById } from "../../redux/BoardSlice";
-//import { moveCard } from "../../redux/CardSlice";
 import ColumnComponent from "../pages/Column";
-import {Column} from '../../types/Column'
 import { Card, Status } from "../../types/Card";
-import { fetchAllCards, moveCardToNewColumn, setCards } from "../../redux/CardSlice";
+import {  moveCardToNewColumn, setCards } from "../../redux/CardSlice";
 import { getByBoardId } from "../../services/CardService";
-import { HubConnectionBuilder } from "@microsoft/signalr";
 
 
 interface BoardProps {
@@ -18,7 +15,6 @@ interface BoardProps {
 
 const Board: React.FC<BoardProps> = ({ boardId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const board = useSelector((state: RootState) => state.board.board);
   const kartice = useSelector((state: RootState) => state.card.cards);
   const cards = useSelector((state: RootState) => state.card.cards); 
 
@@ -42,7 +38,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         };
     
         fetchAllCards();
-    }, [dispatch]);
+    }, [dispatch, boardId]);
     
   const statuses: Status[] = [
     Status.ToDo,
@@ -66,7 +62,6 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         .unwrap()
         .then(() => {
           console.log("Kartica premestena u novu kolonu!");
-         // dispatch(fetchAllCards()); 
           
         })
         .catch((err) => {
@@ -76,8 +71,10 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
   };
   
   
-  return (
+  return (<div>
+    <h1> </h1>
         <div className="board">
+
     {statuses.map((status) => (
         <ColumnComponent
         key={status}
@@ -90,7 +87,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         />
     ))}
     </div>
-
+</div>
   );
 };
 

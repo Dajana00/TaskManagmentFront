@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getLoggedIn, getUserProjects, createProject } from "../../services/UserService";
+import { getLoggedIn } from "../../services/UserService";
 import { Project } from "../../types/Project";
 import "./Dashboard.css";
 import { useAuth } from "../../utils/AuthContext";
 import Board from "./Board";
-import Sidebar from "./Sidebar"; // Import Sidebar component
+import Sidebar from "./Sidebar"; 
 import Backlog from "./Backlog";
 import SprintsPage from "./Sprints";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { fetchUserProjects, createNewProject } from "../../redux/ProjectSlice";
+
 
 const Dashboard = () => {
     const { user, setUser } = useAuth();
-    const [projects, setProjects] = useState<Project[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
+    const { projects, loading } = useSelector((state: RootState) => state.project);
     const [newProjectName, setNewProjectName] = useState("");
     const [creatingProject, setCreatingProject] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-    const [viewMode, setViewMode] = useState<"board" | "backlog" | "sprints">("board"); // Dodajemo stanje za switch
-
+    const [viewMode, setViewMode] = useState<"board" | "backlog" | "sprints">("board"); 
 
     useEffect(() => {
         const fetchUserDataAndProjects = async () => {
@@ -24,44 +28,59 @@ const Dashboard = () => {
                 try {
                     const userData = await getLoggedIn();
                     setUser(userData);
-                    
+    
                     if (userData.id) {
-                        const userProjects = await getUserProjects(userData.id);
-                        setProjects(userProjects);
-                    }
-                    
-                    const savedProject = localStorage.getItem("selectedProject");
-                    if (savedProject) {
-                        try {
-                            const parsedProject = JSON.parse(savedProject);
-                            setSelectedProject(parsedProject);
-                        } catch (e) {
-                            console.error("Invalid project in localStorage", e);
+                        // Učitavanje projekata samo ako nisu već učitani
+                        await dispatch(fetchUserProjects(userData.id));
+    
+                        const savedProject = localStorage.getItem("selectedProject");
+    
+                        if (savedProject) {
+                            try {
+                                const parsedProject = JSON.parse(savedProject);
+    
+                                // Uzimamo projekte iz Redux-a
+                                const currentUserProjects = projects;
+                                const validProject = currentUserProjects.find(p => p.id === parsedProject.id);
+    
+                                if (validProject) {
+                                    setSelectedProject(validProject);
+                                } else {
+                                    // Ako projekat nije validan, obriši ga iz localStorage
+                                    localStorage.removeItem("selectedProject");
+                                    setSelectedProject(null);
+                                }
+                            } catch (e) {
+                                console.error("Invalid project in localStorage", e);
+                                localStorage.removeItem("selectedProject");
+                                setSelectedProject(null);
+                            }
                         }
                     }
-                    
                 } catch (error) {
                     console.error("Error fetching user or projects:", error);
                 }
             }
         };
-
+    
         fetchUserDataAndProjects();
-    }, [setUser]);
-
+    }, [dispatch, setUser, projects]); // Dodajemo projects u zavisnosti
+    
     const handleCreateProject = async () => {
         if (!user?.id || !newProjectName.trim()) return;
-
+    
         try {
-            const newProject = await createProject({ id: 0, name: newProjectName, ownerId: user.id });
-            setProjects((prevProjects) => [...prevProjects, newProject]);
+            const newProject = await dispatch(
+                createNewProject({ id: 0, name: newProjectName, ownerId: user.id })
+            ).unwrap();
+            await dispatch(fetchUserProjects(user.id));
             setNewProjectName("");
             setCreatingProject(false);
-            //openBoard(newProject.id); 
         } catch (error) {
             console.error("Error creating project:", error);
         }
     };
+    
 const openBoard = (project: Project) => {
     setSelectedProject(project);
     localStorage.setItem("selectedProject", JSON.stringify(project));

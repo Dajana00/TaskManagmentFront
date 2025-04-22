@@ -19,7 +19,7 @@
   position: relative;
   width: 100%;
   height: 50px;
-  margin: 30px 0;
+  margin: 50px 0;
   
 }
 
@@ -33,6 +33,9 @@
   font-size: 16px;
   color: #fff;
   padding: 20px 45px 20px 45px;
+  margin-top:20px;
+  margin-button:20px;
+  padding-left: 35px;
 }
 
 .auth-input-box input::placeholder {
@@ -42,7 +45,7 @@
 .auth-input-box .auth-icon {
   position: absolute;
   right: 20px;
-  top: 60%;
+  top: 100%;
   transform: translateY(-50%);
   font-size: 16px;
 }
@@ -53,7 +56,7 @@
   background: #fff;
   border: none;
   outline: none;
-  margin-top: 40px;
+  margin-top: 60px;
   border-radius: 50px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -66,10 +69,10 @@
   background: #f0f0f0;
 }
 
-.auth-container .auth-register-link {
+.auth-wrapper .auth-register-link {
   font-size: 14.5px;
   text-align: center;
-  //margin: 80px 50px 85px;
+  margin-top: 20px;
 }
 
 .auth-register-link p a {
@@ -92,6 +95,6 @@
 /* Prikaz grešaka */
 .auth-error-message {
   color: red;
-  font-size: 14px;
+  font-size: 7px;
   margin-top: 5px;
 }

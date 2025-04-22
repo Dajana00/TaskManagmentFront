@@ -9,6 +9,14 @@ import { useDispatch } from "react-redux";
 interface TaskListProps {
   userStoryId: number;
 }
+const statusPriority: Record<string, number> = {
+  Backlog: 0,
+  ToDo: 1,
+  InProgress: 2,
+  QA: 3,
+  Done: 4,
+};
+
 
 const TaskList: React.FC<TaskListProps> = ({ userStoryId }) => {
   const [tasks, setTasks] = useState<Card[]>([]);
@@ -18,7 +26,11 @@ const TaskList: React.FC<TaskListProps> = ({ userStoryId }) => {
   useEffect(() => {
     const fetchTasks = async () => {
       const data = await getByUserStoryId(userStoryId);
-      setTasks(data);
+      const sorted = data.sort(
+        (a: Card, b: Card) => statusPriority[a.status] - statusPriority[b.status]
+      );
+      
+      setTasks(sorted);
     };
     fetchTasks();
   }, [userStoryId]);

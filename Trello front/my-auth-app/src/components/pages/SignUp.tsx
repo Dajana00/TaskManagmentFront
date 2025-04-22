@@ -5,6 +5,7 @@ import { useForm } from "../../hooks/useForm";
 import { validateRegister } from "../../utils/validation";
 import InputField from "../common/InputField";
 import axios from "axios";
+import "./SignUp.css"
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -50,30 +51,30 @@ const SignUp: React.FC = () => {
   }, [serverError]);
 
   return (
-    <div className="auth-wrapper">
+    <div className="signUp-wrapper">
       <h2>Register</h2>
       {serverError && <p className="error-message">{serverError}</p>}
-      <form onSubmit={handleSubmit} className="auth-container">
-      <div className="auth-input-box">
+      <form onSubmit={handleSubmit} className="signUp-container">
+      <div className="signUp-input-box">
         <InputField label="" placeholder="Fist name" type="text" name="firstName" value={values.firstName}
                     error={touchedFields.firstName ? errors.firstName : ""} onChange={handleChange} />
-        </div> <div className="auth-input-box">
+        </div> <div className="signUp-input-box">
         <InputField label="" type="text" placeholder="Last name" name="lastName" value={values.lastName}
                    error={touchedFields.lastName ? errors.lastName : ""} onChange={handleChange} />
-        </div> <div className="auth-input-box">
+        </div> <div className="signUp-input-box">
         <InputField label="" type="email" placeholder="Email" name="email" value={values.email} 
                   error={touchedFields.email ? errors.email : ""} onChange={handleChange} />
-        </div> <div className="auth-input-box">
+        </div> <div className="signUp-input-box">
         <InputField label="" type="text" placeholder="Username" name="username" value={values.username} 
                  error={touchedFields.username ? errors.username : ""} onChange={handleChange} />
-        </div> <div className="auth-input-box">
+        </div> <div className="signUp-input-box">
         <InputField label="" type="password" placeholder="Password" name="password" value={values.password}
                  error={touchedFields.password ? errors.password : ""} onChange={handleChange} />
-        </div> <div className="auth-input-box">
+        </div> <div className="signUp-input-box">
         <InputField label="" type="text" placeholder="Phone number" name="phoneNumber" value={values.phoneNumber} 
                 error={touchedFields.phoneNumber ? errors.phoneNumber : ""} onChange={handleChange} />
         </div>
-        <button type="submit" disabled={
+        <button className="signUp-button" type="submit" disabled={
               loading || Object.keys(validateRegister(values)).length > 0 }>
           {loading ? "Registering..." : "Register"}
           
