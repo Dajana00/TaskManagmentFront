@@ -1,17 +1,15 @@
-import { createSlice, createAsyncThunk, PayloadAction, AsyncThunkAction, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { Sprint, SprintStatus } from "../types/Sprint";
-import {activateSprint, createSprint, getByProjectId } from "../services/SprintService";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { Sprint } from "../types/Sprint";
+import {activateSprint, completeSprint, createSprint, getByProjectId } from "../services/SprintService";
 
 export const addNewSprint = createAsyncThunk(
   "sprint/addNewSprint",
   async (sprint: Omit<Sprint, "id">, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("token");
       const response = await createSprint(sprint);
       return response;
     } catch (error) {
-      return rejectWithValue("Failed to create card");
+      return rejectWithValue("failed"+error);
     }
   }
 );
@@ -24,7 +22,7 @@ export const fetchByProjectId = createAsyncThunk(
       return response; 
 
     } catch (error) {
-      return rejectWithValue("Failed to fetch sprints");
+      return rejectWithValue("Failed to fetch sprints"+error);
     }
   }
 );
@@ -38,10 +36,26 @@ export const activateSprintById = createAsyncThunk(
       return response; 
 
     } catch (error) {
-      return rejectWithValue("Failed to activate sprint");
+      return rejectWithValue("Failed to activate sprint"+error);
     }
   }
 );
+export const completeSprintByBoardId = createAsyncThunk(
+  "sprints/complete",
+  async (
+     boardId: number ,
+    { rejectWithValue }
+  ) => {
+    try {
+      console.log("Slice za complete sprinta: ", boardId);
+      const response = await completeSprint(boardId);
+      return response;
+    } catch (error) {
+      return rejectWithValue("Failed to activate sprint: " + error);
+    }
+  }
+);
+
 const sprintSlice = createSlice({
   name: "sprints",
   initialState: {
@@ -71,7 +85,53 @@ const sprintSlice = createSlice({
       .addCase(addNewSprint.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+      })
+      .addCase(fetchByProjectId.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchByProjectId.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.sprints = action.payload;
+      })
+      .addCase(fetchByProjectId.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+
+      .addCase(activateSprintById.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(activateSprintById.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Ažuriraj sprint u listi (npr. da ima isActive true)
+        const updated = action.payload;
+        const index = state.sprints.findIndex(s => s.id === updated.id);
+        if (index !== -1) {
+          state.sprints[index] = updated;
+        }
+      })
+      .addCase(activateSprintById.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+
+      .addCase(completeSprintByBoardId.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(completeSprintByBoardId.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Ažuriraj sprint u listi (npr. da je završen)
+        const updated = action.payload;
+        const index = state.sprints.findIndex(s => s.id === updated.id);
+        if (index !== -1) {
+          state.sprints[index] = updated;
+        }
+      })
+      .addCase(completeSprintByBoardId.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
       });
+
       
       
   },

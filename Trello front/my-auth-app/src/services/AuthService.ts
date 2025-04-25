@@ -1,9 +1,8 @@
 import axios from "axios";
-import { LoginFormData } from "../types/loginFormData.types";
-import { User } from "../types/userTypes";
+import { handleAxiosError } from "../utils/HandleAxiosError";
 
 const API_URL = process.env.REACT_APP_API_URL;
-console.log("API URL ", API_URL)
+console.log("API URL ", API_URL);
 
 
 export const loginUser = async (credentials: { username: string; password: string }) => {
@@ -25,11 +24,6 @@ export const loginUser = async (credentials: { username: string; password: strin
         const response = await axios.post(`${API_URL}/auth/signup`, userData);
         return response.data; // Očekuje AuthResponseDto { accessToken, refreshToken }
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const errorMessage = error.response?.data?.message || "An unknown error occurred"; 
-            throw new Error(errorMessage); 
-        } else {
-            throw new Error("An unexpected error occurred");
-        }
+       handleAxiosError(error,"error registering user");
     }
 };

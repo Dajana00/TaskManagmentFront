@@ -24,3 +24,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* Sakrivanje scrollbara */
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
+}

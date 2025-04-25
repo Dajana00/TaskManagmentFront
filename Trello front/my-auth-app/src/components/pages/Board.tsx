@@ -5,8 +5,9 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { fetchBoardById } from "../../redux/BoardSlice";
 import ColumnComponent from "../pages/Column";
 import { Card, Status } from "../../types/Card";
-import {  moveCardToNewColumn, setCards } from "../../redux/CardSlice";
+import {  moveCardToNewColumn, resetCards, setCards } from "../../redux/CardSlice";
 import { getByBoardId } from "../../services/CardService";
+import { completeSprintByBoardId } from "../../redux/SprintSlice";
 
 
 interface BoardProps {
@@ -15,19 +16,19 @@ interface BoardProps {
 
 const Board: React.FC<BoardProps> = ({ boardId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const kartice = useSelector((state: RootState) => state.card.cards);
   const cards = useSelector((state: RootState) => state.card.cards); 
+  const [errorMessage, setErrorMessage] = useState("");
 
 
   useEffect(() => {
     dispatch(fetchBoardById(boardId));
-    console.log("Redux state: ",kartice); 
 
   }, [dispatch, boardId]);
 
   
    useEffect(() => {
         const fetchAllCards = async () => {
+          dispatch(resetCards(cards));
             try {
                 const stories = await getByBoardId(boardId);
                 console.log("ucitane kartice ", stories);
@@ -70,9 +71,46 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
    
   };
   
+  const completeSprintHandler = () => {
+    dispatch(completeSprintByBoardId(boardId)) 
+      .unwrap()
+      .then(() => {
+        console.log("Sprint uspešno završen!");
+      })
+      .catch((err) => {
+        let message = "Unexpected error occurred while completing the sprint.";
+      
+        // Ako err ima .message
+        if (typeof err === "object" && err?.message) {
+          message = err.message;
+        } else if (typeof err === "string") {
+          // Pokušaj da izvučeš 'poruku' iz stringa ako je formatovan kao "Exception: Message='Some text'"
+          const match = err.match(/Message='([^']+)'/);
+          if (match && match[1]) {
+            message = match[1];
+          } else {
+            message = err;
+          }
+        }
+      
+        setErrorMessage(message);
+      });
+      
+  };
   
   return (<div>
-    <h1> </h1>
+  <h1 className="h1-style">
+      ACTIVE SPRINT
+        <button
+          onClick={completeSprintHandler}
+          className="completeSprintButton"
+        >
+          Complete Sprint
+        </button>
+  </h1>
+  {errorMessage && <p className="error">{errorMessage}</p>}
+
+    
         <div className="board">
 
     {statuses.map((status) => (

@@ -10,7 +10,7 @@ import "./SignUp.css"
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState("");
+  const [serverError] = useState("");
 
 
   const { values, handleChange, handleSubmit: formSubmit, errors , touchedFields} = useForm({

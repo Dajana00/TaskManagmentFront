@@ -62,7 +62,10 @@ const cardSlice = createSlice({
   reducers: {
     setCards: (state, action: PayloadAction<Card[]>) => {
         state.cards = action.payload;
-    }
+    },
+    resetCards: (state, action: PayloadAction<Card[]>) => {
+      state.cards = [];
+  }
   },
   extraReducers: (builder) => {
     builder
@@ -126,7 +129,7 @@ const cardSlice = createSlice({
   },
 });
 
-export const { setCards } = cardSlice.actions;
+export const { setCards, resetCards } = cardSlice.actions;
 
 export default cardSlice.reducer;
 

@@ -12,7 +12,8 @@ interface SprintProps {
 const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
     
     const dispatch = useDispatch<AppDispatch>();
-    const { sprints, status, error } = useSelector((state: RootState) => state.sprint);
+    const { sprints, status } = useSelector((state: RootState) => state.sprint);
+    const [errorMessage, setErrorMessage] = useState("");
 
     const [name, setName] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -35,8 +36,16 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!name || !startDate || !endDate) return;
+        setErrorMessage(""); // Resetujemo prethodnu grešku
     
+        if(!name){
+            setErrorMessage("Name is required");
+            return;
+        }
+        if(!startDate || !endDate){
+            setErrorMessage("Dates are required");
+            return;
+        }
         const newSprint: Omit<Sprint, "id"> = {
             name,
             startDate: new Date(startDate),
@@ -45,12 +54,24 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
             projectId,
         };
     
-        await dispatch(addNewSprint(newSprint)).unwrap();
-        await dispatch(fetchByProjectId(projectId));
-        setName("");
-        setStartDate("");
-        setEndDate("");
+        try {
+            await dispatch(addNewSprint(newSprint)).unwrap();
+            await dispatch(fetchByProjectId(projectId));
+            setName("");
+            setStartDate("");
+            setEndDate("");
+        } catch (err: any) {
+             
+            let message = err || "Unexpected error occurred while creating sprint.";
+            const match = message.match(/Message='([^']+)'/); // trazim poruku izmedjuu ' '
+            if (match && match[1]) {
+                message = match[1]; 
+            }
+
+            setErrorMessage(message);
+        }
     };
+    
     
     const handleActivateSprint = async (sprintId: number) => {
         try {
@@ -58,8 +79,12 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
             await dispatch(activateSprintById(sprintId)).unwrap();
             dispatch(fetchByProjectId(projectId)); 
         } catch (err: any) {
-            alert(err+ " Check if you have already active sprint!"); 
-            
+                let message = err || "Unexpected error occurred while creating sprint.";
+                const match = message.match(/Message='([^']+)'/); 
+                if (match && match[1]) {
+                    message = match[1]; 
+                }
+                setErrorMessage(message);            
         }
       };
       
@@ -92,7 +117,7 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
             </form>
 
             {status === "loading" && <p>Loading...</p>}
-            {error && <p className="error">{error}</p>}
+            {errorMessage && <p className="error">{errorMessage}</p>}
 
             <ul className="sprint-list">
                 {sprints.map((sprint) => (

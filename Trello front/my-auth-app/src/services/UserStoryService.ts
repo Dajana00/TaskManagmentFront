@@ -1,40 +1,25 @@
-import axios from "axios";
 import { UserStory } from "../types/UserStory";
+import axiosInstance from "../utils/AxiosIntance";
+import { handleAxiosError } from "../utils/HandleAxiosError";
 
 const API_URL = process.env.REACT_APP_API_URL + "/userStory";  
 
 export const createUserStory = async (card: Omit<UserStory, "id">): Promise<UserStory> => {
     try {
-        const token = localStorage.getItem("token");  
-
-        const response = await axios.post<UserStory>(API_URL+'/create', card, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`, 
-            },
-        });
-
+        const response = await axiosInstance.post<UserStory>(API_URL+'/create', card,);
         return response.data; 
     } catch (error) {
         console.error("Failed to create UserStory:", error);
-        throw new Error("Failed to create UserStory");
+        handleAxiosError(error,"Unexpected error while creating user story");
     }
 };
 
 export const getByBacklogId = async (backlogId: number): Promise<UserStory[]> => {
     try {
-        const token = localStorage.getItem("token");  
-
-        const response = await axios.get<UserStory[]>(API_URL+'/getByBacklogId/'+ backlogId, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`, 
-            },
-        });
-
+        const response = await axiosInstance.get<UserStory[]>(API_URL+'/getByBacklogId/'+ backlogId);
         return response.data; 
     } catch (error) {
         console.error("Failed to get UserStory by backlogId:", error);
-        throw new Error("Failed to get UserStory by backlogId");
+        handleAxiosError(error,"Failed to get UserStory by backlogId")
     }
 };

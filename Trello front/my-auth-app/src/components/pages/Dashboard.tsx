@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getLoggedIn } from "../../services/UserService";
 import { Project } from "../../types/Project";
 import "./Dashboard.css";
@@ -15,7 +15,7 @@ import { fetchUserProjects, createNewProject } from "../../redux/ProjectSlice";
 const Dashboard = () => {
     const { user, setUser } = useAuth();
     const dispatch = useDispatch<AppDispatch>();
-    const { projects, loading } = useSelector((state: RootState) => state.project);
+    const { projects } = useSelector((state: RootState) => state.project);
     const [newProjectName, setNewProjectName] = useState("");
     const [creatingProject, setCreatingProject] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -39,7 +39,6 @@ const Dashboard = () => {
                             try {
                                 const parsedProject = JSON.parse(savedProject);
     
-                                // Uzimamo projekte iz Redux-a
                                 const currentUserProjects = projects;
                                 const validProject = currentUserProjects.find(p => p.id === parsedProject.id);
     
@@ -64,13 +63,13 @@ const Dashboard = () => {
         };
     
         fetchUserDataAndProjects();
-    }, [dispatch, setUser, projects]); // Dodajemo projects u zavisnosti
+    }, [dispatch, setUser, projects.length]); 
     
     const handleCreateProject = async () => {
         if (!user?.id || !newProjectName.trim()) return;
     
         try {
-            const newProject = await dispatch(
+            await dispatch(
                 createNewProject({ id: 0, name: newProjectName, ownerId: user.id })
             ).unwrap();
             await dispatch(fetchUserProjects(user.id));
