@@ -1,88 +1,66 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* 3. Sakrij scroll bar */
+body::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+body {
+  scrollbar-width: none; /* Firefox */
+}
 .flexbox-container {
   display: flex;
   flex-direction: row;
-  gap: 25px;
-  justify-content: flex-start;
-}
-.wrapper {
-  flex: 0 0 300px; /* Fiksna širina */
-  background: transparent;
-  border: 2px solid rgba(255,255,255,.2);
-  backdrop-filter: blur(30px);
-  color: #fff;
-  border-radius: 10px;
-  padding: 30px 40px;
-  box-shadow: 0 0 10px rgba(0,0,0, .2);
-  margin-left: -170px;
-}
-.form-backlog {
-    display: flex;
-    flex-direction: column;
-    width:200px;
-    height: 450px; 
-    //gap: 1px; /* Povećava razmak između polja */
-}
-.form-spacer {
-  flex-grow: 1;
-}
- 
-.wrapper h1 {
-    font-size: 36px;
-    text-align: center;
-  }
-.wrapper .input-box {
-    margin-bottom: 0px;
-    position: relative;
-    width: 100%;
-    height: 150px;
-  }
-  
-.input-box input{
-    width:100%;
-    height:150%;
-    background:transparent;
-    border: 2px solid rgba(255,255,255, .2);
-    outline: none;
-    
-    border-radius:40px;
-    font-size:16px;
-    color :#fff;
-    padding: 0px 5px 0px 5px;
-  }
-  
-.input-box input::placeholder{
-    color : #fff;
-  
-  }
-  
-.input-box .icon{
-    position:absolute;
-    right: 20px;
-    top:50%;
-    transform: translateY(-50%);
-    font-size:16px;
-    height: auto; 
-  
-  }
-  
-.wrapper button{
+  justify-content: left;
+  margin-left:-400px;
+  margin-top:50px;
+ }
 
-    width:100%;
-    height:45px;
-    background:#fff;
-    broder: none;
-    outline:none;
-    border-radius:40px;
-    box-shadow:0 0 10px rgba(0, 0, 0, .1);
-    cursor: pointer;
-    font-size: 16px;
-    color: #333;
-    margin-top: -30px;
-    font-weight: 0;
-  }
-.button: hover{
-    
-  }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  //background: rgba(0, 0, 0, 0.5); /* zamagljena pozadina */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: transparent;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+  
+
+  
+
   
 .wrapper .register-link{
     font-size: 14.5px;
@@ -115,7 +93,12 @@
 
   /* Stilovi za prikaz liste user story-ja */
 .userstory-list {
-  gap:5px;
+  align-items: left;
+  //gap:5px;
+  width: 400px;             
+  height: 100vh;
+  flex-shrink: 0;
+  
 }
 
 .userstory-list ul {
@@ -124,15 +107,21 @@
   margin: 10;
 }
 
+.plus-icon{
+  margin: 3px 5px 0px 5px;
+  height:12px;
+  weight:12px;
+}
 .userstory-list li {
   background-color: #fff;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 400px;
   border-left: 5px solid #007BFF;
   transition: transform 0.3s ease;
   margin:10px;
+  height:200px;
 }
 
 .userstory-list li:hover {
@@ -141,7 +130,10 @@
 .userstory-section {
   display: flex;
   flex-direction: row;
+  justify-content: left;
+  min-height: 0;
   gap: 2rem;
+  //margin: 220px;
 }
 
 /* Stil za kartice user story-ja */
@@ -179,6 +171,7 @@
 .userstory-list p {
   font-size: 1.1rem;
   color: #999;
+  flex: 1;  
 }
 
 /* Responsivni dizajn */
@@ -204,13 +197,14 @@
 }
 
 .userstory-item.selected {
-  background-color: #e6f7ff;
+  background-color:rgb(147, 196, 218);
   font-weight: bold;
 }
 .show-task-form-btn {
   margin-top: 12px;
   padding: 8px 16px;
-  background-color: #2563eb;
+  margin-left:10px;
+  background-color:rgb(103, 146, 237);
   color: white;
   border: none;
   border-radius: 8px;

@@ -1,24 +1,22 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+// routes/AppRoutes.tsx
+import { Routes as Routes, Route, Navigate } from "react-router-dom";
 import SignUp from "../components/pages/SignUp";
 import Login from "../components/pages/Login";
 import Dashboard from "../components/pages/Dashboard";
 
 const AppRoutes = () => {
-    const accessToken = localStorage.getItem("accessToken"); // Provera da li je korisnik ulogovan
+  const accessToken = localStorage.getItem("accessToken");
 
-    return (
-        <Router>
-            <Routes>
-                {/* Ako korisnik nije prijavljen, ide na SignUp */}
-                
-
-                <Route path="/" element={<Login />} />
-                <Route path="/login" element={<Login />} />
-
-                <Route path="/dashboard" element={accessToken ? <Dashboard /> : <Navigate to="/login" />} />
-            </Routes>
-        </Router>
-    );
+  return (
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/dashboard" element={accessToken ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    
+  );
 };
 
 export default AppRoutes;

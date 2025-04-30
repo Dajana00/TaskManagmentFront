@@ -3,13 +3,11 @@ import "./Board.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchBoardById } from "../../redux/BoardSlice";
-//import { moveCard } from "../../redux/CardSlice";
 import ColumnComponent from "../pages/Column";
-import {Column} from '../../types/Column'
 import { Card, Status } from "../../types/Card";
-import { fetchAllCards, moveCardToNewColumn, setCards } from "../../redux/CardSlice";
-import { getAll } from "../../services/CardService";
-import { HubConnectionBuilder } from "@microsoft/signalr";
+import {  moveCardToNewColumn, resetCards, setCards } from "../../redux/CardSlice";
+import { getByBoardId } from "../../services/CardService";
+import { completeSprintByBoardId } from "../../redux/SprintSlice";
 
 
 interface BoardProps {
@@ -18,47 +16,21 @@ interface BoardProps {
 
 const Board: React.FC<BoardProps> = ({ boardId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const board = useSelector((state: RootState) => state.board.board);
-  const kartice = useSelector((state: RootState) => state.card.cards);
   const cards = useSelector((state: RootState) => state.card.cards); 
-  const [columns, setColumns] = useState(board?.columns || []);
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   useEffect(() => {
     dispatch(fetchBoardById(boardId));
-    console.log("Redux state: ",kartice); 
 
   }, [dispatch, boardId]);
 
-
-  useEffect(() => {
-    const connection = new HubConnectionBuilder()
-    .withUrl("http://localhost:5196/cardHub")
-    .withAutomaticReconnect()
-    .build();
   
-  
-    connection
-      .start()
-      .then(() => console.log("Connected to SignalR"))
-      .catch((err) => console.error("SignalR connection error:", err));
-  
-    connection.on("CardMoved", (cardId: number, newStatus: string) => {
-      console.log(`📩 Card ${cardId} moved to ${newStatus}`);
-      fetchAllCards();
-    });
-  
-    return () => {
-      connection.stop();
-    };
-  }, [dispatch]);
-  
-
-  
-
    useEffect(() => {
         const fetchAllCards = async () => {
+          dispatch(resetCards(cards));
             try {
-                const stories = await getAll();
+                const stories = await getByBoardId(boardId);
                 console.log("ucitane kartice ", stories);
                 dispatch(setCards(stories)); 
             } catch (err) {
@@ -67,7 +39,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         };
     
         fetchAllCards();
-    }, [dispatch]);
+    }, [dispatch, boardId]);
     
   const statuses: Status[] = [
     Status.ToDo,
@@ -91,8 +63,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         .unwrap()
         .then(() => {
           console.log("Kartica premestena u novu kolonu!");
-          dispatch(fetchAllCards()); // ovo ažurira Redux store i osvežava prikaz
-
+          
         })
         .catch((err) => {
           console.error("Greška pri premještanju kartice: ", err);
@@ -100,9 +71,48 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
    
   };
   
+  const completeSprintHandler = () => {
+    dispatch(completeSprintByBoardId(boardId)) 
+      .unwrap()
+      .then(() => {
+        console.log("Sprint uspešno završen!");
+      })
+      .catch((err) => {
+        let message = "Unexpected error occurred while completing the sprint.";
+      
+        // Ako err ima .message
+        if (typeof err === "object" && err?.message) {
+          message = err.message;
+        } else if (typeof err === "string") {
+          // Pokušaj da izvučeš 'poruku' iz stringa ako je formatovan kao "Exception: Message='Some text'"
+          const match = err.match(/Message='([^']+)'/);
+          if (match && match[1]) {
+            message = match[1];
+          } else {
+            message = err;
+          }
+        }
+      
+        setErrorMessage(message);
+      });
+      
+  };
   
-  return (
+  return (<div>
+  <h1 className="h1-style">
+      ACTIVE SPRINT
+        <button
+          onClick={completeSprintHandler}
+          className="completeSprintButton"
+        >
+          Complete Sprint
+        </button>
+  </h1>
+  {errorMessage && <p className="error">{errorMessage}</p>}
+
+    
         <div className="board">
+
     {statuses.map((status) => (
         <ColumnComponent
         key={status}
@@ -115,7 +125,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         />
     ))}
     </div>
-
+</div>
   );
 };
 

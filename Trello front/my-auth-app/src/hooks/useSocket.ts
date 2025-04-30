@@ -20,5 +20,5 @@ connection.start()
 connection.on("CardMoved", (cardId: number, newStatus: string) => {
     console.log("******************USAOOOOO********************8")
     console.log(`Card ${cardId} moved to ${newStatus}`);
-    dispatch(fetchAllCards()) 
+   
 });

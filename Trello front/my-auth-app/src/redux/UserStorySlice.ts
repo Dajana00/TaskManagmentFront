@@ -36,7 +36,10 @@ const userStorySlice = createSlice({
     reducers: {
         setUserStories: (state, action: PayloadAction<UserStory[]>) => {
             state.userStories = action.payload;
-        }
+        },
+        resetUserStories: (state) => {
+            state.userStories = []; 
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -65,7 +68,7 @@ const userStorySlice = createSlice({
     },
 });
 
-export const { setUserStories } = userStorySlice.actions;
+export const { setUserStories , resetUserStories} = userStorySlice.actions;
 
 
 export default userStorySlice.reducer;

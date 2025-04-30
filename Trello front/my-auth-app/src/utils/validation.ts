@@ -6,7 +6,6 @@ export const validateLogin = (values: { username: string; password: string }) =>
   if (!values.password) errors.password = "Password is required";
   else if (!passwordRegex.test(values.password)) 
       errors.password = "Password must be at least 6 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character";
-
   return errors;
 };
   
@@ -31,3 +30,22 @@ export const validateLogin = (values: { username: string; password: string }) =>
     return errors;
   };
   
+
+export const validateUserStory = (values: { title: string; description: string }) => {
+  const errors: Partial<typeof values> = {};
+
+  if (!values.title.trim()) errors.title = "Title is required";
+  if (!values.description.trim()) errors.description = "Description is required";
+
+  return errors;
+};
+
+export const validateTask = (values: { title: string; description: string; dueDate: string }) => {
+  const errors: Partial<{ title: string; description: string; dueDate: string }> = {};
+  
+  if (!values.title.trim()) errors.title = "Title is required";
+  if (!values.description.trim()) errors.description = "Description is required";
+  if (!values.dueDate) errors.dueDate = "Due date is required";
+
+  return errors;
+};

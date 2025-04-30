@@ -12,8 +12,6 @@ export const useForm = <T extends Record<string, any>>(
     const { name, value } = e.target;
 
     setValues({ ...values, [name]: value });
-
-    // Set touched field to true when user starts typing
     setTouchedFields({ ...touchedFields, [name]: true });
 
     if (validate) {

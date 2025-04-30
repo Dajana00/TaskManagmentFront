@@ -1,5 +1,6 @@
 .task-list-container {
     padding: 16px;
+    margin-left:50px
   }
   
   .task-grid {
@@ -15,6 +16,8 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 16px;
     transition: transform 0.2s;
+    width : 200px;
+    height: 150px;
   }
   
   .task-card:hover {
