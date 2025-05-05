@@ -1,5 +1,6 @@
 import axios from "axios";
 import { handleAxiosError } from "../utils/HandleAxiosError";
+import axiosInstance from "../utils/AxiosIntance";
 
 const API_URL = process.env.REACT_APP_API_URL;
 console.log("API URL ", API_URL);
@@ -7,7 +8,7 @@ console.log("API URL ", API_URL);
 
 export const loginUser = async (credentials: { username: string; password: string }) => {
     console.log("API Url :",API_URL);
-    const response = await axios.post(`${API_URL}/auth/login`, credentials);
+    const response = await axiosInstance.post(`${API_URL}/auth/login`, credentials);
     return response.data; // Očekuje AuthResponseDto { accessToken, refreshToken }
   };
 
