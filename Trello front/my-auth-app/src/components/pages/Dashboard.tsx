@@ -10,6 +10,7 @@ import SprintsPage from "./Sprints";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchUserProjects, createNewProject } from "../../redux/ProjectSlice";
+import { CardModalProvider } from "../../hooks/CardModalContext";
 
 
 const Dashboard = () => {
@@ -113,7 +114,9 @@ const openSprints = (project: Project) => {
     <div className="main-content">
         {selectedProject ? (
             viewMode === "board" ? (
+                <CardModalProvider>
                 <Board boardId={selectedProject.boardId} />
+                </CardModalProvider>
             ) : viewMode === "backlog" ? (
                 <Backlog backlogId={selectedProject.backlogId} />
             ) : viewMode === "sprints" ? (

@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserStory } from "../types/UserStory";
-import { createUserStory } from "../services/UserStoryService";
+import { createUserStory, getById } from "../services/UserStoryService";
 import { getByBacklogId} from "../services/UserStoryService"
+import { RootState } from "./store";
 interface UserStoryState {
     userStories: UserStory[];
     loading: boolean;
@@ -28,7 +29,12 @@ export const fetchUserStoriesByBacklogId = createAsyncThunk(
         return await getByBacklogId(backlogId);
     }
 );
-
+export const fetchUserStoriesById = createAsyncThunk(
+    "userStories/fetchById",
+    async (id: number) => {
+        return await getById(id);
+    }
+);
 
 const userStorySlice = createSlice({
     name: "userStories",
@@ -62,6 +68,21 @@ const userStorySlice = createSlice({
                 state.userStories = action.payload;
             })
             .addCase(fetchUserStoriesByBacklogId.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message || "Failed to fetch User Stories";
+            })
+            .addCase(fetchUserStoriesById.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchUserStoriesById.fulfilled, (state, action: PayloadAction<UserStory>) => {
+                state.loading = false;
+                const exists = state.userStories.find(us => us.id === action.payload.id);
+                if (!exists) {
+                    state.userStories.push(action.payload);
+                }
+            })
+            
+            .addCase(fetchUserStoriesById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || "Failed to fetch User Stories";
             });

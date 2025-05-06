@@ -58,7 +58,7 @@ const TaskList: React.FC<TaskListProps> = ({ userStoryId }) => {
 
               {task.status === "Backlog" && (
               <button
-                className="add-to-sprint-btn"
+                className="add-to-sprint-button"
                 onClick={() => handleAddToSprint(task.id)}
               >
                 Add to Active Sprint

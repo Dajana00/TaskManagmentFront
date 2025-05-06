@@ -131,7 +131,7 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
                    </div>
                    <button
                      onClick={() => handleActivateSprint(sprint.id)}
-                     disabled={sprint.status === SprintStatus.Active}
+                     disabled={sprint.status === SprintStatus.Active || sprint.status === SprintStatus.Completed}
                    >
                      {sprint.status === SprintStatus.Active ? "Active" : "Activate"}
                    </button>

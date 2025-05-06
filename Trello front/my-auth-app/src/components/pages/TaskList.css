@@ -1,13 +1,28 @@
 .task-list-container {
     padding: 16px;
-    margin-left:50px
+    margin-left:50px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 16px;
+  margin-left: 20px;
+  flex-grow: 1;
+  scrollbar-width: none;
   }
+
+
   
   .task-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    scrollbar-width: none;
   }
+    /* 3. Sakrij scroll bar */
+    task-grid::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+    
   
   .task-card {
     background-color: #ffffff;
@@ -17,7 +32,7 @@
     padding: 16px;
     transition: transform 0.2s;
     width : 200px;
-    height: 150px;
+    height: 160px;
   }
   
   .task-card:hover {
@@ -34,6 +49,11 @@
     margin-top: 8px;
     font-size: 14px;
     color: #666;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Ograničava na dva reda */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis; 
   }
   
   .task-status {
@@ -48,4 +68,28 @@
     color: #999;
     font-size: 14px;
   }
-  
+
+
+
+
+.add-to-sprint-button {
+  background-color: #28a745; /* Green background */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 12px;  /* Smaller font size */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: auto; /* Push the button to the bottom of the card */
+  align-self: flex-end; /* Align the button to the right */
+}
+
+.add-to-sprint-button:hover {
+  background-color: #218838; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lifting effect */
+}
+
+.add-to-sprint-button:active {
+  transform: translateY(1px); /* Button "pressed" effect */
+}

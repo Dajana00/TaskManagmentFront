@@ -7,12 +7,15 @@ import { UserStory } from "../../types/UserStory";
 import { getByBacklogId } from "../../services/UserStoryService";
 import InputField from "../common/InputField";
 import "./AddUserStoryForm.css";
+import { validateUserStory } from "../../utils/validation";
 
 interface Props {
   backlogId: number;
+  onClose: () => void; 
 }
 
-const AddUserStoryForm: React.FC<Props> = ({ backlogId }) => {
+
+const AddUserStoryForm: React.FC<Props> = ({ backlogId , onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error } = useSelector((state: RootState) => state.userStory);
 
@@ -21,14 +24,8 @@ const AddUserStoryForm: React.FC<Props> = ({ backlogId }) => {
     description: "",
   };
 
-  const validate = (values: typeof initialState) => {
-    let errors: Partial<typeof initialState> = {};
-    if (!values.title.trim()) errors.title = "Title is required";
-    if (!values.description.trim()) errors.description = "Description is required";
-    return errors;
-  };
 
-  const { values, handleChange, handleSubmit, errors, touchedFields } = useForm(initialState, validate);
+  const { values, handleChange, handleSubmit, errors, touchedFields } = useForm(initialState, validateUserStory);
 
   const onSubmit = async () => {
     const newStory: Omit<UserStory, "id"> = {
@@ -49,8 +46,9 @@ const AddUserStoryForm: React.FC<Props> = ({ backlogId }) => {
   };
 
   return (
-    <div className="wrapper">
-      <h2>Add User Story</h2>
+    <div className="wrapper-add-userStory">
+  <button className="close-modal-inside" onClick={onClose}>×</button>   
+     <h2>Add User Story</h2>
       <form className="form-backlog" onSubmit={(e) => handleSubmit(e, onSubmit)}>
         <div className="input-box">
           <InputField
@@ -75,9 +73,8 @@ const AddUserStoryForm: React.FC<Props> = ({ backlogId }) => {
             <div className="error-message">{errors.description}</div>
           )}
         </div>
-        <div className="form-spacer"></div>
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className="wrapper-add-userStory-button">
           {loading ? "Adding..." : "Add User Story"}
         </button>
         {error && <p className="error-text">{error}</p>}

@@ -1,0 +1,90 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 110vw;
+    height: 110vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background:transparent;
+
+  }
+  
+  .modal-content {
+    padding:50px;
+    background:white !important;
+    border-radius: 16px;
+    max-width: 1000px;
+    width: 105%;
+    max-height: 110vh;
+    overflow-y: auto;
+    z-index: 1001;
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative; 
+  }
+  
+ 
+  @keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .modal-header {
+    background:white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+  
+  .modal-section {
+    display: flex;
+    background:white;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .modal-section h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .modal-section p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  
+  .close-button {
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s ease;
+  }
+  
+  .close-button:hover {
+    color: #555;
+  }
+  

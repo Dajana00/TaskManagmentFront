@@ -23,3 +23,12 @@ export const getByBacklogId = async (backlogId: number): Promise<UserStory[]> =>
         handleAxiosError(error,"Failed to get UserStory by backlogId")
     }
 };
+export const getById = async (id: number): Promise<UserStory> => {
+    try {
+        const response = await axiosInstance.get<UserStory>(API_URL+'/getById/'+ id);
+        return response.data; 
+    } catch (error) {
+        console.error("Failed to get UserStory by id:", error);
+        handleAxiosError(error,"Failed to get UserStory by id")
+    }
+};
