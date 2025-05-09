@@ -99,15 +99,14 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
   };
   
   return (<div>
-  <h1 className="h1-style">
-      ACTIVE SPRINT
-        <button
-          onClick={completeSprintHandler}
-          className="completeSprintButton"
-        >
-          Complete Sprint
-        </button>
-  </h1>
+ <div className="sprint-header">
+  <div className="spacer" />
+  
+  <h2 className="sprint-title">Sprints</h2>
+  <button className="complete-sprint-btn">Complete Sprint</button>
+</div>
+
+
   {errorMessage && <p className="error">{errorMessage}</p>}
 
     

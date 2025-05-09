@@ -57,5 +57,48 @@
     min-height: 50px;
 }
 .completeSprintButton{
-    
+        width:100px;
+        height: 45px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        cursor: pointer;
+        font-size: 14px;
+        color: white;
+        margin-top:-15px;
+        padding: 0.5rem 1rem;
 }
+
+.sprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  
+  .spacer {
+    width: 100px; /* isto kao dugme */
+  }
+  
+  .sprint-title {
+    text-align: center;
+    flex-grow: 1;
+    font-size: 35px;
+    margin: 0;
+  }
+  
+  .complete-sprint-btn {
+    width: 100px;
+    height: 45px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+  }
+  .complete-sprint-btn:hover{
+    background-color:rgb(9, 104, 205);
+  }

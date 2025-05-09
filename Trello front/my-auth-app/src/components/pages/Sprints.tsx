@@ -88,6 +88,18 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
         }
       };
       
+
+    const statusOrder = {
+        [SprintStatus.Active]: 0,
+        [SprintStatus.Backlog]: 1,
+        [SprintStatus.Completed]: 2,
+        [SprintStatus.Archived]: 3,
+    };
+    
+    const sortedSprints = [...sprints].sort(
+        (a, b) => statusOrder[a.status] - statusOrder[b.status]
+    );
+    
     return (
         <div className="sprint-page">
             <h2>Sprints</h2>
@@ -118,28 +130,37 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
 
             {status === "loading" && <p>Loading...</p>}
             {errorMessage && <p className="error">{errorMessage}</p>}
+            <table className="modern-table">
+        <thead>
+            <tr>
+            <th>Name</th>
+            <th>Dates</th>
+            <th>Status</th>
+            <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {sortedSprints.map((sprint) => (
+            <tr key={sprint.id}>
+                <td><strong>{sprint.name}</strong></td>
+                <td>
+                {new Date(sprint.startDate).toLocaleDateString("sr-RS")} – {new Date(sprint.endDate).toLocaleDateString("sr-RS")}
 
-            <ul className="sprint-list">
-                {sprints.map((sprint) => (
-                   <li key={sprint.id}>
-                   <div>
-                     <strong>{sprint.name}</strong>{" "}
-                     <span>
-                       ({new Date(sprint.startDate).toLocaleDateString()} -{" "}
-                       {new Date(sprint.endDate).toLocaleDateString()}) – {sprint.status}
-                     </span>
-                   </div>
-                   <button
-                     onClick={() => handleActivateSprint(sprint.id)}
-                     disabled={sprint.status === SprintStatus.Active || sprint.status === SprintStatus.Completed}
-                   >
-                     {sprint.status === SprintStatus.Active ? "Active" : "Activate"}
-                   </button>
-                 </li>
-                 
-                ))}
-                
-            </ul>
+                </td>
+                <td>{sprint.status}</td>
+                <td>
+                {sprint.status === SprintStatus.Backlog ? (
+                    <button onClick={() => handleActivateSprint(sprint.id)}>Activate</button>
+                ) : sprint.status === SprintStatus.Active ? (
+                    <span style={{ fontWeight: "bold" }}></span>
+                ) : null}
+
+                </td>
+            </tr>
+            ))}
+        </tbody>
+        </table>
+
         </div>
     );
 };

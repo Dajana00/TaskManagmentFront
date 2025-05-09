@@ -3,6 +3,7 @@
     max-width: 1200px;
     margin: 0 auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: -100px;
   }
   
   .sprint-page h2 {
@@ -40,33 +41,9 @@
   .sprint-form button:hover {
     background-color: #0056b3;
   }
-  .sprint-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 20px;
-    width: 100%;
-  }
   
-  .sprint-list li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-    font-size: 16px;
-  }
   
-  .sprint-list li strong {
-    margin-right: 10px;
-    color: #333;
-    font-size: 17px;
-  }
-  
-  .sprint-list li span {
-    color: #666;
-  }
-  
-  .sprint-list button {
+  .modern-table button {
     padding: 6px 14px;
     background-color: #28a745;
     color: white;
@@ -76,12 +53,29 @@
     font-size: 14px;
   }
   
-  .sprint-list button[disabled] {
+  .modern-table button[disabled] {
     background-color: #aaa;
     cursor: not-allowed;
   }
   
   
+  .modern-table {
+    width: 100%;
+    text-align: center; /* centriranje za sve ćelije */
+  }
+  
+
+  .modern-table td {
+    padding: 12px;
+    text-align: center; /* centriranje teksta u kolonama */
+    vertical-align: middle; /* vertikalno centriranje */
+  }
+  
+  .modern-table th{
+    padding: 12px !important;
+    text-align: center  !important; /* centriranje teksta u kolonama */
+    vertical-align: middle  !important;
+  }
   .error {
     color: red;
     font-weight: bold;

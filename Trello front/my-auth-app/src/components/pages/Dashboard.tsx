@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchUserProjects, createNewProject } from "../../redux/ProjectSlice";
 import { CardModalProvider } from "../../hooks/CardModalContext";
+import ProjectMembers from "./ProjectMembers";
 
 
 const Dashboard = () => {
@@ -20,7 +21,7 @@ const Dashboard = () => {
     const [newProjectName, setNewProjectName] = useState("");
     const [creatingProject, setCreatingProject] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-    const [viewMode, setViewMode] = useState<"board" | "backlog" | "sprints">("board"); 
+    const [viewMode, setViewMode] = useState<"board" | "backlog" | "sprints" | "members">("board"); 
 
     useEffect(() => {
         const fetchUserDataAndProjects = async () => {
@@ -97,6 +98,11 @@ const openSprints = (project: Project) => {
     localStorage.setItem("selectedProject", JSON.stringify(project));
     setViewMode("sprints");
 };
+const openMembers = (project: Project) => {
+    setSelectedProject(project);
+    localStorage.setItem("selectedProject", JSON.stringify(project));
+    setViewMode("members");
+};
     return (
         <div className="dashboard-container">
             <Sidebar
@@ -109,6 +115,7 @@ const openSprints = (project: Project) => {
                 openBoard={openBoard}
                 openBacklog={openBacklog}
                 openSprints={openSprints}
+                openMembers={openMembers}
             />
 
     <div className="main-content">
@@ -121,6 +128,8 @@ const openSprints = (project: Project) => {
                 <Backlog backlogId={selectedProject.backlogId} />
             ) : viewMode === "sprints" ? (
                 <SprintsPage key={selectedProject.id} projectId={selectedProject.id} />
+            ) :  viewMode === "members" ? (
+                <ProjectMembers key={selectedProject.id} projectId={selectedProject.id} />
             ) : null
         ) : (
             <h2>Welcome to Dashboard</h2>

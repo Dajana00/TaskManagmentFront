@@ -12,6 +12,7 @@ interface SidebarProps {
     openBoard: (project: Project) => void;
     openBacklog: (project: Project) => void;
     openSprints: (project: Project) => void;
+    openMembers: (project: Project) => void;
 
 }
 
@@ -24,7 +25,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     handleCreateProject,
     openBoard,
     openBacklog,
-    openSprints
+    openSprints,
+    openMembers
 }) => {
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
@@ -76,6 +78,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                             </div>
                             <div className="dropdown-menu">
                              <button onClick={() => openSprints(project)}>Sprints</button>
+                            </div>
+                            <div className="dropdown-menu">
+                             <button onClick={() => openMembers(project)}>Members</button>
                             </div></>
                         )}
                     </li>

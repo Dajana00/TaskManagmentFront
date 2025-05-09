@@ -5,6 +5,8 @@ import cardReducer from"./CardSlice";
 import userStoryReducer from "./UserStorySlice"
 import sprintReducer from "./SprintSlice";
 import projectReducer from "./ProjectSlice"
+import projectMembersReducer from "./ProjectMembersSlice"
+import projectNonMembersReducer from "./ProjectNonMembersSlice"
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +15,9 @@ export const store = configureStore({
     card: cardReducer,
     userStory: userStoryReducer,
     sprint: sprintReducer,
-    project: projectReducer
+    project: projectReducer,
+    projectMembers: projectMembersReducer,
+    projectNonMembers: projectNonMembersReducer
   },
 });
 

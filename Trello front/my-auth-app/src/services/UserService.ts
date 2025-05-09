@@ -20,4 +20,35 @@ export const getLoggedIn = async (): Promise<User> => {
 };
 
 
+export const getProjectMembers = async (projectId: number) :Promise<User[]>=> {
+    try {
+        const response = await axiosInstance.get<User[]>(API_URL+`/getByProjectId/${projectId}`);
+        return response.data; 
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        handleAxiosError(error,"Unexpected error while fetching users by project id"); 
+    }
+};
+
+
+export const getProjectNonMembers = async (projectId: number) :Promise<User[]>=> {
+    try {
+        const response = await axiosInstance.get<User[]>(API_URL+`/getNonMembers/${projectId}`);
+        console.log("Servis metoda za dohvatanje non members: ",response);
+        return response.data; 
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        handleAxiosError(error,"Unexpected error while fetching users by project id"); 
+    }
+};
+export const addOnProject = async (projectId: number, userId:number) => {
+    try {
+        const response = await axiosInstance.post(API_URL+`/addOnProject/${projectId}/${userId}`);
+        return response.data; 
+    } catch (error) {
+        console.error("Error adding user on project:", error);
+        handleAxiosError(error,"Unexpected error while adding user on project"); 
+    }
+};
+
 
