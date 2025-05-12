@@ -95,9 +95,16 @@ body {
 }
 
 .plus-icon{
-  margin: 3px 5px 0px 5px;
-  height:12px;
-  weight:12px;
+  //margin: 3px 5px 0px 5px;
+  height:18px;
+  weight:18px;
+  color:black;
+  font-weight:bold;
+  transition: transform 0.2s ease-in-out;
+}
+
+.plus-icon:hover{
+   transform: scale(1.2);
 }
 .userstory-list li {
   background-color: #fff;
@@ -191,12 +198,12 @@ body {
   margin-top: 12px;
   padding: 8px 16px;
   margin-left:10px;
-  background-color:rgb(103, 146, 237);
+ background-color: transparent;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+ /* transition: background-color 0.2s ease;*/
 }
 
 .modal-overlay-backlog {
@@ -228,7 +235,9 @@ body {
   gap: 24px;
 }
 .show-task-form-btn:hover {
-  background-color: #1d4ed8;
+  background-color:transparent;
+  backdrop-filter: blur(30px);
+
 }
 
 .task-panel{

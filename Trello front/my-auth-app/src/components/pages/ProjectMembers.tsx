@@ -96,20 +96,21 @@ const ProjectMembers: React.FC<ProjectMembersProps> = ({ projectId }) => {
       {showModal && (
         <div className="modal-overlay-nonMembers">
           <div className="modal-nonMembers">
+          <button className="close-icon" onClick={() => setShowModal(false)}>×</button>
+
             <h4>Select users to add:</h4>
             {nonMembers.length === 0 ? (
               <p>No users available.</p>
             ) : (
-              <ul>
+              <ul className="user-list">
                 {nonMembers.map((user: User) => (
-                  <li key={user.id}>
+                  <li className="user-list-item" key={user.id}>
                     {user.firstName} {user.lastName} ({user.username})
-                    <button onClick={() => handleAddMember(user.id)}>Add</button>
+                    <button onClick={() => handleAddMember(user.id)} className="add-button" >Add</button>
                   </li>
                 ))}
               </ul>
             )}
-            <button onClick={() => setShowModal(false)}>Close</button>
           </div>
         </div>
       )}

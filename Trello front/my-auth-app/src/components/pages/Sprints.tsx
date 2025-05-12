@@ -142,7 +142,7 @@ const SprintsPage: React.FC<SprintProps> = ({ projectId }) =>{
         <tbody>
             {sortedSprints.map((sprint) => (
             <tr key={sprint.id}>
-                <td><strong>{sprint.name}</strong></td>
+                <td>{sprint.name}</td>
                 <td>
                 {new Date(sprint.startDate).toLocaleDateString("sr-RS")} – {new Date(sprint.endDate).toLocaleDateString("sr-RS")}
 

@@ -12,9 +12,10 @@ import { completeSprintByBoardId } from "../../redux/SprintSlice";
 
 interface BoardProps {
   boardId: number;
+  projectId: number;
 }
 
-const Board: React.FC<BoardProps> = ({ boardId }) => {
+const Board: React.FC<BoardProps> = ({ boardId , projectId}) => {
   const dispatch = useDispatch<AppDispatch>();
   const cards = useSelector((state: RootState) => state.card.cards); 
   const [errorMessage, setErrorMessage] = useState("");
@@ -120,7 +121,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
             name: status,
             cards: getCardsByStatus(status),
         }}
-        onCardDrop={handleCardDrop}
+        onCardDrop={handleCardDrop} projectId={projectId}
         />
     ))}
     </div>

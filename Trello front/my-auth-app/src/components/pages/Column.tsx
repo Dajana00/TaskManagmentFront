@@ -5,9 +5,10 @@ import CardComponent from "./Card";
 interface ColumnProps {
   column: { id: number; name: string; cards: CardType[] };
   onCardDrop: (cardId: number, newStatus: string) => void;
+  projectId: number;
 }
 
-const Column: React.FC<ColumnProps> = ({ column, onCardDrop }) => {
+const Column: React.FC<ColumnProps> = ({ column, onCardDrop, projectId }) => {
   // Funkcija koja se poziva kada kartica počne da se prevlači
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, cardId: number) => {
     e.dataTransfer.setData("cardId", cardId.toString());
@@ -41,7 +42,7 @@ const Column: React.FC<ColumnProps> = ({ column, onCardDrop }) => {
             draggable
             onDragStart={(e) => handleDragStart(e, card.id)} // Pokreće drag start
           >
-            <CardComponent card={card} />
+            <CardComponent card={card} projectId={projectId}/>
           </div>
         ))}
       </div>

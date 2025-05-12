@@ -7,6 +7,7 @@ import sprintReducer from "./SprintSlice";
 import projectReducer from "./ProjectSlice"
 import projectMembersReducer from "./ProjectMembersSlice"
 import projectNonMembersReducer from "./ProjectNonMembersSlice"
+import cardMemberReducer from "./UserCardSlice"
 
 export const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
     sprint: sprintReducer,
     project: projectReducer,
     projectMembers: projectMembersReducer,
-    projectNonMembers: projectNonMembersReducer
+    projectNonMembers: projectNonMembersReducer,
+    cardMembers: cardMemberReducer
   },
 });
 

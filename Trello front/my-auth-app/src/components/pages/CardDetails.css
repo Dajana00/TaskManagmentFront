@@ -75,16 +75,62 @@
     gap: 24px;
   }
   
-  .close-button {
-    background: transparent;
+  .close-button-cardDetails {
     border: none;
+    background:transparent;
     font-size: 1.8rem;
     cursor: pointer;
-    color: #999;
+    color: black;
     transition: color 0.2s ease;
   }
   
   .close-button:hover {
-    color: #555;
   }
-  
+  .member-bubbles {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.member-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #1976d2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+.add-member-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.non-members-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.non-member-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.add-btn {
+  font-size: 12px;
+  padding: 2px 6px;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+}

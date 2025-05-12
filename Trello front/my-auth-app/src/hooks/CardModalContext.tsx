@@ -3,7 +3,7 @@ import { Card } from "../types/Card";
 import CardDetails from "../components/pages/CardDetails";
 
 interface CardModalContextType {
-  showCard: (card: Card) => void;
+  showCard: (card: Card, projectId:number) => void;
   close: () => void;
 }
 
@@ -16,15 +16,24 @@ export const useCardModal = () => {
 };
 
 export const CardModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+const [modalData, setModalData] = useState<{ card: Card; projectId: number } | null>(null);
 
-  const showCard = (card: Card) => setSelectedCard(card);
-  const close = () => setSelectedCard(null);
+const showCard = (card: Card, projectId: number) => {
+  setModalData({ card, projectId });
+};
+  const close = () => setModalData(null);
 
   return (
     <CardModalContext.Provider value={{ showCard, close }}>
       {children}
-      {selectedCard && <CardDetails card={selectedCard} onClose={close} />}
+      {modalData && (
+      <CardDetails
+        card={modalData.card}
+        projectId={modalData.projectId}
+        onClose={close}
+      />
+)}
+
     </CardModalContext.Provider>
   );
 };

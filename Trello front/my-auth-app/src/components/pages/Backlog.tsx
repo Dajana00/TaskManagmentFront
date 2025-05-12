@@ -63,7 +63,7 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
                     onClick={() => setShowForm((prev) => !prev)}
                    className="show-task-form-btn"
                 >
-                    {showForm ? "Close Form" : "New"}
+                    {showForm ? "Close Form" : ""}
                     <FaPlus className="plus-icon"></FaPlus>
                  </button>
                 </h1>
@@ -96,7 +96,7 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
                     className="show-task-form-btn"
                     onClick={() => setShowTaskForm(true)}
                     >
-                    New 
+                     
                     <FaPlus className="plus-icon"/>
                     </button>
                     </h2 >

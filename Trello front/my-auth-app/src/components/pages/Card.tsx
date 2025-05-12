@@ -9,6 +9,7 @@ import { useCardModal } from "../../hooks/CardModalContext";
 
 interface CardProps {
   card: CardType;
+  projectId: number
 }
 
 function getColorFromId(id: number): string {
@@ -25,7 +26,7 @@ function getColorFromId(id: number): string {
   return colors[id % colors.length];
 }
 
-const CardComponent: React.FC<CardProps> = ({ card }) => {
+const CardComponent: React.FC<CardProps> = ({ card , projectId}) => {
   const dispatch = useDispatch<AppDispatch>();
   
   const userStory = useSelector((state: RootState) =>
@@ -47,7 +48,7 @@ const CardComponent: React.FC<CardProps> = ({ card }) => {
   
   return (
     <>
-    <div className="card"  onClick={() => showCard(card)}
+    <div className="card"  onClick={() => showCard(card,projectId)}
     style={{ borderLeft: `6px solid ${borderColor}` }}
     draggable>
       <h4>{card.title}</h4>

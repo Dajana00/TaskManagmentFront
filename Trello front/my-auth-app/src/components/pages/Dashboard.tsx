@@ -122,7 +122,7 @@ const openMembers = (project: Project) => {
         {selectedProject ? (
             viewMode === "board" ? (
                 <CardModalProvider>
-                <Board boardId={selectedProject.boardId} />
+                <Board boardId={selectedProject.boardId} projectId={selectedProject.id}/>
                 </CardModalProvider>
             ) : viewMode === "backlog" ? (
                 <Backlog backlogId={selectedProject.backlogId} />
