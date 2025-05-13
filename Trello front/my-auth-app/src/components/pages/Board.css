@@ -5,6 +5,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 
 .board {
@@ -57,14 +58,14 @@
     min-height: 50px;
 }
 .completeSprintButton{
-        width:100px;
+        width:120px;
         height: 45px;
         background-color: #007bff;
         border: none;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, .1);
         cursor: pointer;
-        font-size: 14px;
+        font-size: 12px;
         color: white;
         margin-top:-15px;
         padding: 0.5rem 1rem;
@@ -83,22 +84,30 @@
   
   .sprint-title {
     text-align: center;
-    flex-grow: 1;
+    //flex-grow: 1;
     font-size: 35px;
     margin: 0;
+    margin-top: 10px;
   }
   
   .complete-sprint-btn {
-    width: 100px;
+    width: 130px;
     height: 45px;
     background-color: #007bff;
     border: none;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight:bold;
     color: white;
   }
   .complete-sprint-btn:hover{
     background-color:rgb(9, 104, 205);
   }
+  .icon-style {
+  font-size: 1.2rem; /* ili npr. 24px, 2rem, koliko god želiš */
+  margin-left: 0.5rem; /* ako želiš razmak između teksta i ikonice */
+  vertical-align: middle; /* poravnanje sa tekstom */
+  margin-bottom:3px;
+}

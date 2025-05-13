@@ -53,7 +53,8 @@ const CardComponent: React.FC<CardProps> = ({ card , projectId}) => {
     draggable>
       <h4>{card.title}</h4>
       <p>{card.description}</p>
-      <small>Due: {new Date(card.dueDate).toLocaleDateString()}</small>
+      <small>Due: {new Date(card.dueDate).toLocaleDateString("sr-RS")}
+</small>
       <small>User Story: {userStory ? userStory.title : "Unknown"}</small>
 
     </div>

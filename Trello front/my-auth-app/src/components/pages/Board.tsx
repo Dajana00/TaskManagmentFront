@@ -8,6 +8,7 @@ import { Card, Status } from "../../types/Card";
 import {  moveCardToNewColumn, resetCards, setCards } from "../../redux/CardSlice";
 import { getByBoardId } from "../../services/CardService";
 import { completeSprintByBoardId } from "../../redux/SprintSlice";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
 
 interface BoardProps {
@@ -88,13 +89,14 @@ const Board: React.FC<BoardProps> = ({ boardId , projectId}) => {
           // Pokušaj da izvučeš 'poruku' iz stringa ako je formatovan kao "Exception: Message='Some text'"
           const match = err.match(/Message='([^']+)'/);
           if (match && match[1]) {
-            message = match[1];
+            alert(match[1]);
+            //message = match[1];
           } else {
-            message = err;
+           // message = err;
           }
         }
       
-        setErrorMessage(message);
+        //setErrorMessage(message);
       });
       
   };
@@ -103,8 +105,11 @@ const Board: React.FC<BoardProps> = ({ boardId , projectId}) => {
  <div className="sprint-header">
   <div className="spacer" />
   
-  <h2 className="sprint-title">Sprints</h2>
-  <button className="complete-sprint-btn">Complete Sprint</button>
+  <h2 className="sprint-title">Active sprint</h2>
+  <button className="complete-sprint-btn" onClick={completeSprintHandler}>Complete Sprint
+    <IoCheckmarkDoneSharp  className="icon-style"/>
+
+  </button>
 </div>
 
 

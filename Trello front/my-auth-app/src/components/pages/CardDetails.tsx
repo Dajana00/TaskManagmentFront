@@ -71,7 +71,8 @@ const handleAddMember = (userId: number) => {
         </div>
         <div className="member-bubbles">
           {members.map((member) => (
-            <div key={member.id} className="member-bubble">
+            <div key={member.id} className="member-bubble"   title={`${member.firstName} ${member.lastName}`}
+>
               {getInitials(member.firstName ?? "", member.lastName ?? "")}
             </div>
           ))}

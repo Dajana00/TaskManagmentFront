@@ -104,10 +104,9 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
                         <TaskList userStoryId={selectedStory.id} />
                         </div>
                     {showTaskForm && (
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                        <button className="close-modal" onClick={() => setShowTaskForm(false)}>×</button>
-                        <TaskForm userStoryId={selectedStory.id} />
+                    <div className="modal-overlay-backlog">
+                        <div className="modal-content-backlog">
+                          <TaskForm userStoryId={selectedStory.id} onClose={() => setShowTaskForm(false)} />
                         </div>
                     </div>
                     )}

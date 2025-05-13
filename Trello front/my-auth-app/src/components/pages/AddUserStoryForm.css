@@ -1,11 +1,11 @@
 .wrapper-add-userStory {
-    background: transparent;
-    backdrop-filter: blur(30px);
+    background: white;
+    backdrop-filter: blur(30px) !important;
     color: #fff;
     border-radius: 10px;
     padding: 30px 40px;
-   //box-shadow: 0 0 10px rgba(0,0,0, .2);
-    height:500px;
+   box-shadow: 0 0 10px rgba(0,0,0, .2);
+    height:550px;
     position:relative;
   }
   .close-modal-inside {
@@ -14,10 +14,13 @@
     right: 10px; /* Razmak od desne ivice */
     background: transparent;
     border: none;
-    color: #fff;
+    color: black;
     font-size: 24px;
     cursor: pointer;
     padding: 5px;
+  }
+.wrapper-add-userStory  h2{
+    color:black !important;
   }
   .form-backlog{
     display: flex;
@@ -37,9 +40,8 @@
     outline: none;
     border-radius: 40px;
     font-size: 16px;
-    color: #fff;
+    color: black;
     height:50px;
-    //padding: 20px 45px 20px 45px;
     margin-top:20px;
     margin-button:20px;
     padding: 20px;
@@ -48,14 +50,16 @@
   
   .input-box input::placeholder,
   .textarea-field::placeholder {
-    color: #fff;
+    color:black;
   }
   
   .textarea-field {
     height: 200px;
     padding: 20px;
     resize: none;
+     color: black;
     font-family: 'Arial', sans-serif; 
+    border: 2px solid rgba(187, 164, 178, 0.2);
   }
   
   .form-spacer {
@@ -75,7 +79,7 @@
     background: #fff;
     border: none;
     border-radius: 40px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
     cursor: pointer;
     font-size: 16px;
     color: #333;

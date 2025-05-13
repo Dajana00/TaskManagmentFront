@@ -1,0 +1,117 @@
+.user-profile {
+  width: 600px;
+  background: transparent;
+  border-radius: 16px;
+  backdrop-filter: blur(30px);
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #1f2937;
+}
+
+.user-profile h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #111827;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: box-shadow 0.2s ease;
+}
+
+.profile-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.profile-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.profile-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+   display: flex;                  
+  justify-content: space-between;
+  align-items: center;     
+}
+.edit-btn,
+.confirm-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 12px;
+  font-size: 18px;
+  color: #4b5563;
+  transition: color 0.2s ease;
+}
+
+.edit-btn:hover,
+.confirm-btn:hover {
+  color: #1f2937;
+}
+.edit-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.edit-input-with-icon {
+  width: 100%;
+  padding: 8px 70px 8px 12px; 
+  font-size: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  color: #111827;
+}
+
+.confirm-btn-icon,
+.cancel-btn-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.cancel-btn-icon {
+  right: 36px;
+  color: #ef4444;
+}
+
+.cancel-btn-icon:hover {
+  color: #b91c1c;
+}
+
+.confirm-btn-icon {
+  right: 8px;
+  color: #10b981;
+}
+
+.confirm-btn-icon:hover {
+  color: #059669;
+}
+
+

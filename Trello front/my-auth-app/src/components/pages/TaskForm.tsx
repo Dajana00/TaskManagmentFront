@@ -8,9 +8,11 @@ import { validateTask } from "../../utils/validation";
 
 interface TaskFormProps {
   userStoryId: number;
+    onClose: () => void; 
+
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({ userStoryId }) => {
+const TaskForm: React.FC<TaskFormProps> = ({ userStoryId, onClose }) => {
   const { values, handleChange, handleSubmit, errors, touchedFields } = useForm(
     {
       title: "",
@@ -33,19 +35,25 @@ const TaskForm: React.FC<TaskFormProps> = ({ userStoryId }) => {
     values.description = "";
     values.dueDate = "";
   };
+return (
+  <div className="wrapper-add-userStory">
+      <button className="close-modal-inside" onClick={onClose}>×</button>   
 
-  return (
-    <form onSubmit={(e) => handleSubmit(e, onSubmit)} className="task-form">
-      <InputField
-        label=""
-        type="text"
-        name="title"
-        value={values.title}
-        placeholder="Enter task title"
-        onChange={handleChange}
-        error={touchedFields.title && errors.title ? errors.title : undefined}
-      />
+    <h2>Add Task</h2>
+    <form onSubmit={(e) => handleSubmit(e, onSubmit)} className="form-backlog">
       
+      <div className="input-box">
+        <InputField
+          label=""
+          type="text"
+          name="title"
+          value={values.title}
+          placeholder="Enter task title"
+          onChange={handleChange}
+          error={touchedFields.title && errors.title ? errors.title : undefined}
+        />
+      </div>
+
       <div className="input-box">
         <textarea
           name="description"
@@ -55,23 +63,38 @@ const TaskForm: React.FC<TaskFormProps> = ({ userStoryId }) => {
           className="textarea-field"
         />
         {touchedFields.description && errors.description && (
-          <div className="error-text">{errors.description}</div>
+          <div className="error-message">{errors.description}</div>
         )}
       </div>
 
-      <InputField
-        label="Due Date"
-        type="date"
-        name="dueDate"
-        value={values.dueDate}
-        placeholder="Enter due date"
-        onChange={handleChange}
-        error={touchedFields.dueDate && errors.dueDate ? errors.dueDate : undefined}
-      />
+      <div className="input-box">
+        <InputField
+          label=""
+          type="date"
+          name="dueDate"
+          value={values.dueDate}
+          placeholder="Enter due date"
+          onChange={handleChange}
+          error={touchedFields.dueDate && errors.dueDate ? errors.dueDate : undefined}
+        />
+      </div>
 
-      <button type="submit">Add Task</button>
+      <button
+        type="submit"
+        disabled={
+          !values.title.trim() ||
+          !values.description.trim() ||
+          !values.dueDate ||
+          Object.keys(errors).length > 0
+        }
+        className="wrapper-add-userStory-button"
+      >
+        {  "Add Task"}
+      </button>
     </form>
-  );
+  </div>
+);
+
 };
 
 

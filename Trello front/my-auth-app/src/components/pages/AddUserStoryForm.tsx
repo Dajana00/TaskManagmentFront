@@ -48,7 +48,7 @@ const AddUserStoryForm: React.FC<Props> = ({ backlogId , onClose }) => {
   return (
     <div className="wrapper-add-userStory">
   <button className="close-modal-inside" onClick={onClose}>×</button>   
-     <h2>Add User Story</h2>
+     <h2 >Add User Story</h2>
       <form className="form-backlog" onSubmit={(e) => handleSubmit(e, onSubmit)}>
         <div className="input-box">
           <InputField
