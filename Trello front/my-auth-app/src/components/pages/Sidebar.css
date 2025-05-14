@@ -57,3 +57,16 @@
 .profile-icon {
   font-size: 1.5rem; /* možeš povećati ili smanjiti po želji */
 }
+.confirm-btn{
+  background:rgb(46, 88, 215) !important;
+  color:white !important;
+  font-size: 14px !important;
+  margin-bottom:3px;
+  margin-left:-2px !important;
+}
+
+.cancel-btn{
+  margin-bottom:3px;
+  background: white;
+  color: rgb(3, 11, 34);
+}

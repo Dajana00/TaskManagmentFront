@@ -4,6 +4,10 @@ import { useAuth } from "../../utils/AuthContext";
 import { FiEdit2, FiCheck, FiX } from "react-icons/fi";
 import InputField from "../common/InputField";
 import axiosInstance from "../../utils/AxiosIntance";
+import { logout } from "../../redux/AuthSlice";
+import { FiLogOut } from "react-icons/fi";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile: React.FC = () => {
     const { user, setUser } = useAuth();
@@ -11,6 +15,8 @@ const UserProfile: React.FC = () => {
     const [fieldValues, setFieldValues] = useState<{ [key: string]: string }>({});
     const [originalValues, setOriginalValues] = useState<{ [key: string]: string }>({});
     const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string | null }>({});
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
@@ -83,7 +89,10 @@ const validateProfileField = (field: string, value: string): string | null => {
 
     return null;
 };
-
+const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login"); 
+};
 const renderField = (label: string, field: string, value: string) => {
     const isEditing = editingField === field;
 
@@ -127,7 +136,15 @@ const renderField = (label: string, field: string, value: string) => {
     }
 
     return (
+        <div>
+         <button className="logout-btn" onClick={() => handleLogout()}>
+            <FiLogOut style={{verticalAlign: "middle", marginRight: "6px" ,marginTop:"-2px"}} />
+            Log Out
+        </button>
+
+  
         <div className="user-profile">
+            
             <h2>My Profile</h2>
             <div className="profile-info">
                 {renderField("Username", "username", user.username)}
@@ -137,6 +154,7 @@ const renderField = (label: string, field: string, value: string) => {
                 {renderField("Phone Number", "phoneNumber", user.phoneNumber || "")}
             </div>
         </div>
+          </div>
     );
 };
 
