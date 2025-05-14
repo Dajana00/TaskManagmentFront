@@ -10,6 +10,9 @@ import SprintsPage from "./Sprints";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchUserProjects, createNewProject } from "../../redux/ProjectSlice";
+import { CardModalProvider } from "../../hooks/CardModalContext";
+import ProjectMembers from "./ProjectMembers";
+import UserProfile from "./UserProfile";
 
 
 const Dashboard = () => {
@@ -19,7 +22,7 @@ const Dashboard = () => {
     const [newProjectName, setNewProjectName] = useState("");
     const [creatingProject, setCreatingProject] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-    const [viewMode, setViewMode] = useState<"board" | "backlog" | "sprints">("board"); 
+    const [viewMode, setViewMode] = useState<"board" | "backlog" | "sprints" | "members" | "profile">("board"); 
 
     useEffect(() => {
         const fetchUserDataAndProjects = async () => {
@@ -96,6 +99,15 @@ const openSprints = (project: Project) => {
     localStorage.setItem("selectedProject", JSON.stringify(project));
     setViewMode("sprints");
 };
+const openMembers = (project: Project) => {
+    setSelectedProject(project);
+    localStorage.setItem("selectedProject", JSON.stringify(project));
+    setViewMode("members");
+};
+
+const openProfile = () => {
+    setViewMode("profile");
+};
     return (
         <div className="dashboard-container">
             <Sidebar
@@ -108,17 +120,26 @@ const openSprints = (project: Project) => {
                 openBoard={openBoard}
                 openBacklog={openBacklog}
                 openSprints={openSprints}
+                openMembers={openMembers}
+                openProfile={openProfile}
             />
 
     <div className="main-content">
+
         {selectedProject ? (
             viewMode === "board" ? (
-                <Board boardId={selectedProject.boardId} />
+                <CardModalProvider>
+                <Board boardId={selectedProject.boardId} projectId={selectedProject.id}/>
+                </CardModalProvider>
             ) : viewMode === "backlog" ? (
                 <Backlog backlogId={selectedProject.backlogId} />
             ) : viewMode === "sprints" ? (
                 <SprintsPage key={selectedProject.id} projectId={selectedProject.id} />
-            ) : null
+            ) :  viewMode === "members" ? (
+                <ProjectMembers key={selectedProject.id} projectId={selectedProject.id} />
+            ) : viewMode === "profile" ? (
+                <UserProfile />
+            ): null
         ) : (
             <h2>Welcome to Dashboard</h2>
         )}

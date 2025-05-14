@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "@microsoft/signalr": "^8.0.7"
+    "@microsoft/signalr": "^8.0.7",
+    "recharts": "^2.15.3"
+  },
+  "devDependencies": {
+    "@types/recharts": "^2.0.1"
   }
 }

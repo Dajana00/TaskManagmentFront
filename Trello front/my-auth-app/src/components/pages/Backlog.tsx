@@ -12,6 +12,7 @@ import { FaPlus } from "react-icons/fa";
 
 interface BacklogProps {
     backlogId: number;
+    
 }
 
 const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
@@ -44,11 +45,9 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
         <div className="flexbox-container">
        
             {showForm && (
-            <div className="modal-overlay">
-                <div className="modal-content">
-                    <button className="close-modal" onClick={() => setShowForm(false)}>×</button>
-                    <AddUserStoryForm backlogId={backlogId} />
-                </div>
+            <div className="modal-overlay-backlog ">
+                <div className="modal-content-backlog">
+                <AddUserStoryForm backlogId={backlogId} onClose={() => setShowForm(false)}  />                </div>
             </div>
             )}
 
@@ -56,17 +55,20 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
         {/* Lista user story-ja */}
         <div className="userstory-section">
             <div className="userstory-list">
+            <div className="userstory-header">
+
                 <h1>User stories    
 
                 <button
                     onClick={() => setShowForm((prev) => !prev)}
                    className="show-task-form-btn"
                 >
-                    {showForm ? "Close Form" : "New"}
+                    {showForm ? "Close Form" : ""}
                     <FaPlus className="plus-icon"></FaPlus>
                  </button>
                 </h1>
-               
+                </div>
+                <div className="userstory-scrollable">
                 {Array.isArray(userStories) && userStories.length > 0 ? (
                     <ul>
                         {userStories.map((story) => (
@@ -82,28 +84,29 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
                 ) : (
                     <p>No user stories yet.</p>
                 )}
+                </div>
             </div>
     
             {selectedStory && (
             <div className="task-panel">
                     
 
-                    <h3>Tasks
+                    <h2 className="h2-backlog">Tasks 
                     <button
                     className="show-task-form-btn"
                     onClick={() => setShowTaskForm(true)}
                     >
-                    New 
+                     
                     <FaPlus className="plus-icon"/>
                     </button>
-                    </h3>
-                    <TaskList userStoryId={selectedStory.id} />
-
+                    </h2 >
+                        <div className="task-list">
+                        <TaskList userStoryId={selectedStory.id} />
+                        </div>
                     {showTaskForm && (
-                    <div className="modal-overlay">
-                        <div className="modal-content">
-                        <button className="close-modal" onClick={() => setShowTaskForm(false)}>×</button>
-                        <TaskForm userStoryId={selectedStory.id} />
+                    <div className="modal-overlay-backlog">
+                        <div className="modal-content-backlog">
+                          <TaskForm userStoryId={selectedStory.id} onClose={() => setShowTaskForm(false)} />
                         </div>
                     </div>
                     )}

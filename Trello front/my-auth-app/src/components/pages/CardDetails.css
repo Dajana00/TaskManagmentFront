@@ -1,0 +1,136 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    background:transparent;
+
+  }
+  
+  .modal-content {
+    padding:50px;
+    background:white !important;
+    border-radius: 16px;
+    max-width: 1000px;
+    width: 105%;
+    max-height: 110vh;
+    overflow-y: auto;
+    z-index: 1001;
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative; 
+  }
+  
+ 
+  @keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .modal-header {
+    background:white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .modal-header h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+  
+  .modal-section {
+    display: flex;
+    background:white;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .modal-section h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .modal-section p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  
+  .close-button-cardDetails {
+    border: none;
+    background:transparent;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: black;
+    transition: color 0.2s ease;
+  }
+  
+  .close-button:hover {
+  }
+  .member-bubbles {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.member-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #1976d2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+.add-member-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.non-members-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.non-member-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.add-btn {
+  font-size: 12px;
+  padding: 2px 6px;
+  background-color: #28a745;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+}

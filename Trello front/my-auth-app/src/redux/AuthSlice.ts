@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Navigate } from "react-router-dom";
 
 interface AuthState {
   accessToken: string | null;
@@ -21,6 +22,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.accessToken = null;
       state.refreshToken = null;
+      localStorage.removeItem("selectedProject");
     },
   },
 });

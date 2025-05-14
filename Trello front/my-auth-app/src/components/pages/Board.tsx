@@ -8,13 +8,15 @@ import { Card, Status } from "../../types/Card";
 import {  moveCardToNewColumn, resetCards, setCards } from "../../redux/CardSlice";
 import { getByBoardId } from "../../services/CardService";
 import { completeSprintByBoardId } from "../../redux/SprintSlice";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
 
 interface BoardProps {
   boardId: number;
+  projectId: number;
 }
 
-const Board: React.FC<BoardProps> = ({ boardId }) => {
+const Board: React.FC<BoardProps> = ({ boardId , projectId}) => {
   const dispatch = useDispatch<AppDispatch>();
   const cards = useSelector((state: RootState) => state.card.cards); 
   const [errorMessage, setErrorMessage] = useState("");
@@ -87,27 +89,30 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
           // Pokušaj da izvučeš 'poruku' iz stringa ako je formatovan kao "Exception: Message='Some text'"
           const match = err.match(/Message='([^']+)'/);
           if (match && match[1]) {
-            message = match[1];
+            alert(match[1]);
+            //message = match[1];
           } else {
-            message = err;
+           // message = err;
           }
         }
       
-        setErrorMessage(message);
+        //setErrorMessage(message);
       });
       
   };
   
   return (<div>
-  <h1 className="h1-style">
-      ACTIVE SPRINT
-        <button
-          onClick={completeSprintHandler}
-          className="completeSprintButton"
-        >
-          Complete Sprint
-        </button>
-  </h1>
+ <div className="sprint-header">
+  <div className="spacer" />
+  
+  <h2 className="sprint-title">Active sprint</h2>
+  <button className="complete-sprint-btn" onClick={completeSprintHandler}>Complete Sprint
+    <IoCheckmarkDoneSharp  className="icon-style"/>
+
+  </button>
+</div>
+
+
   {errorMessage && <p className="error">{errorMessage}</p>}
 
     
@@ -121,7 +126,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
             name: status,
             cards: getCardsByStatus(status),
         }}
-        onCardDrop={handleCardDrop}
+        onCardDrop={handleCardDrop} projectId={projectId}
         />
     ))}
     </div>

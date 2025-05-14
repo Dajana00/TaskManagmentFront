@@ -4,7 +4,7 @@
     
     border-radius: 8px; /* Zaobljene ivice */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Senka oko kartice */
-    padding: 15px; /* Unutrašnji razmak */
+    padding: 12px; /* Unutrašnji razmak */
     margin-bottom: 10px; /* Razmak između kartica */
     transition: box-shadow 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -30,7 +30,11 @@
   .card p {
     font-size: 0.9rem;
     color: #555;
+    white-space: nowrap;     
+    overflow: hidden;         
+    text-overflow: ellipsis;  
   }
+  
   
   .card small {
     font-size: 0.8rem;
