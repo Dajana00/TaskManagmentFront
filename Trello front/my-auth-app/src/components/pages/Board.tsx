@@ -77,6 +77,7 @@ const Board: React.FC<BoardProps> = ({ boardId , projectId}) => {
     dispatch(completeSprintByBoardId(boardId)) 
       .unwrap()
       .then(() => {
+         dispatch(resetCards(cards));
         console.log("Sprint uspešno završen!");
       })
       .catch((err) => {
@@ -106,7 +107,7 @@ const Board: React.FC<BoardProps> = ({ boardId , projectId}) => {
   <div className="spacer" />
   
   <h2 className="sprint-title">Active sprint</h2>
-  <button className="complete-sprint-btn" onClick={completeSprintHandler}>Complete Sprint
+  <button className="complete-sprint-btn" onClick={completeSprintHandler}>Complete
     <IoCheckmarkDoneSharp  className="icon-style"/>
 
   </button>

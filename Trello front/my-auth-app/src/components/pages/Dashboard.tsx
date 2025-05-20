@@ -132,7 +132,7 @@ const openProfile = () => {
                 <Board boardId={selectedProject.boardId} projectId={selectedProject.id}/>
                 </CardModalProvider>
             ) : viewMode === "backlog" ? (
-                <Backlog backlogId={selectedProject.backlogId} />
+                <Backlog backlogId={selectedProject.backlogId} projectId={selectedProject.id} />
             ) : viewMode === "sprints" ? (
                 <SprintsPage key={selectedProject.id} projectId={selectedProject.id} />
             ) :  viewMode === "members" ? (

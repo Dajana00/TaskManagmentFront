@@ -70,10 +70,16 @@ body {
     width: 450px;
     height: 100vh;
     flex-shrink: 0;
-    overflow: hidden; /* da spreči celokupan overflow */
     background-color: transparent;
-  }
-  
+   overflow-y:auto;
+    scrollbar-width: none; 
+    -ms-overflow-style: none;  
+}
+
+ .userstory-list::-webkit-scrollbar {
+    display: none; 
+}
+
   .userstory-header {
     flex-shrink: 0;
     padding: 10px 10px 0 10px;
@@ -82,10 +88,16 @@ body {
   }
   
   .userstory-scrollable {
-    overflow-y: auto;
     flex-grow: 1;
     padding: 10px;
-  }
+     overflow-y:auto;
+    scrollbar-width: none; 
+    -ms-overflow-style: none;  
+}
+
+ .userstory-scrollable::-webkit-scrollbar {
+    display: none; 
+}
   
 
 .userstory-list ul {
@@ -148,7 +160,7 @@ body {
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.2);
   outline: none;
-  border-radius: 40px;
+  border-radius: 15px;
   font-size: 16px;
   color: #fff;
   padding: 20px;
@@ -187,7 +199,7 @@ body {
 .userstory-item {
   cursor: pointer;
   padding: 0.5rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee; 
 }
 
 .userstory-item.selected {

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { addUserStory, setUserStories } from "../../redux/UserStorySlice";
+import { addUserStory, setUserStories, updateUserStory } from "../../redux/UserStorySlice";
 import { UserStory } from "../../types/UserStory";
 import { getByBacklogId } from "../../services/UserStoryService";
 import InputField from "../common/InputField";
@@ -11,44 +11,53 @@ import { validateUserStory } from "../../utils/validation";
 
 interface Props {
   backlogId: number;
-  onClose: () => void; 
+  onClose: () => void;
+  storyToEdit?: UserStory | null;
 }
 
 
-const AddUserStoryForm: React.FC<Props> = ({ backlogId , onClose }) => {
+const AddUserStoryForm: React.FC<Props> = ({ backlogId , onClose , storyToEdit}) => {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error } = useSelector((state: RootState) => state.userStory);
 
-  const initialState = {
-    title: "",
-    description: "",
-  };
+const initialState = {
+  title: storyToEdit?.title || "",
+  description: storyToEdit?.description || "",
+};
 
 
   const { values, handleChange, handleSubmit, errors, touchedFields } = useForm(initialState, validateUserStory);
 
-  const onSubmit = async () => {
-    const newStory: Omit<UserStory, "id"> = {
-      title: values.title,
-      description: values.description,
-      backlogId,
-    };
-
-    try {
-      await dispatch(addUserStory(newStory)).unwrap();
-      const updatedStories = await getByBacklogId(backlogId);
-      dispatch(setUserStories(updatedStories));
-      values.title = "";
-      values.description = "";
-    } catch (err) {
-      console.error("Greška prilikom dodavanja:", err);
-    }
+const onSubmit = async () => {
+  const storyPayload = {
+    title: values.title,
+    description: values.description,
+    backlogId,
   };
+
+  try {
+    if (storyToEdit) {
+    await dispatch(updateUserStory({
+      id: storyToEdit.id,
+      updatedStory: storyPayload
+    })).unwrap();
+    } else {
+      await dispatch(addUserStory(storyPayload)).unwrap();
+    }
+    const updatedStories = await getByBacklogId(backlogId);
+    dispatch(setUserStories(updatedStories));
+
+    onClose();
+  } catch (err) {
+    console.error("Greška prilikom snimanja:", err);
+  }
+};
+
 
   return (
     <div className="wrapper-add-userStory">
   <button className="close-modal-inside" onClick={onClose}>×</button>   
-     <h2 >Add User Story</h2>
+      <h2>{storyToEdit ? "Edit User Story" : "Add User Story"}</h2>
       <form className="form-backlog" onSubmit={(e) => handleSubmit(e, onSubmit)}>
         <div className="input-box">
           <InputField
@@ -75,7 +84,7 @@ const AddUserStoryForm: React.FC<Props> = ({ backlogId , onClose }) => {
         </div>
 
         <button type="submit" disabled={loading} className="wrapper-add-userStory-button">
-          {loading ? "Adding..." : "Add User Story"}
+          {loading ? (storyToEdit ? "Editing..." : "Adding...") : (storyToEdit ? "Edit User Story" : "Add User Story")}
         </button>
         {error && <p className="error-text">{error}</p>}
       </form>

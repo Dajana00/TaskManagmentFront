@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { setUserStories , resetUserStories} from "../../redux/UserStorySlice";
+import { setUserStories , resetUserStories, deleteUserStory} from "../../redux/UserStorySlice";
 import { UserStory } from "../../types/UserStory";
 import './Backlog.css';
 import { getByBacklogId } from "../../services/UserStoryService";
@@ -9,19 +9,35 @@ import TaskList from "./TaskList";
 import TaskForm from "./TaskForm";
 import AddUserStoryForm from "./AddUserStoryForm";
 import { FaPlus } from "react-icons/fa";
+import { Pencil, Trash2 } from "lucide-react";
+
 
 interface BacklogProps {
     backlogId: number;
-    
+    projectId:number;
 }
 
-const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
+const Backlog: React.FC<BacklogProps> = ({ backlogId , projectId}) => {
     const dispatch = useDispatch<AppDispatch>();
     const { userStories } = useSelector((state: RootState) => state.userStory);
     const [selectedStory, setSelectedStory] = useState<UserStory | null>(null);
     const [showTaskForm, setShowTaskForm] = useState(false); 
     const [showForm, setShowForm] = useState(false);
+    const [storyToEdit, setStoryToEdit] = useState<UserStory | null>(null);
 
+
+const handleDeleteStory = async (storyId: number) => {
+  try {
+    await dispatch(deleteUserStory(storyId)).unwrap();
+    const updatedStories = await getByBacklogId(backlogId);
+    dispatch(setUserStories(updatedStories));
+    if (selectedStory?.id === storyId) {
+      setSelectedStory(null);
+    }
+  } catch (error) {
+    console.error("Greška pri brisanju:", error);
+  }
+};
     useEffect(() => {
         setShowTaskForm(false); 
       }, [selectedStory]);
@@ -47,7 +63,15 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
             {showForm && (
             <div className="modal-overlay-backlog ">
                 <div className="modal-content-backlog">
-                <AddUserStoryForm backlogId={backlogId} onClose={() => setShowForm(false)}  />                </div>
+                    <AddUserStoryForm
+                    backlogId={backlogId}
+                    storyToEdit={storyToEdit}
+                    onClose={() => {
+                        setShowForm(false);
+                        setStoryToEdit(null);
+                    }}
+                    />
+                                   </div>
             </div>
             )}
 
@@ -72,13 +96,34 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
                 {Array.isArray(userStories) && userStories.length > 0 ? (
                     <ul>
                         {userStories.map((story) => (
-                            <li
+                         <li
                                 key={story.id}
-                                onClick={() => setSelectedStory(story)}
                                 className={`userstory-item ${selectedStory?.id === story.id ? "selected" : ""}`}
-                            >
-                                <strong>{story.title}</strong> {story.description}
-                            </li>
+                                >
+                                <div onClick={() => setSelectedStory(story)} className="userstory-content">
+                                    <strong>{story.title}</strong> {story.description}
+                                </div>
+
+                                <div className="userstory-actions">
+                                    <Pencil
+                                        className="icon edit-icon"
+                                        onClick={(e: React.MouseEvent) => {
+                                            e.stopPropagation();
+                                            setStoryToEdit(story);
+                                            setShowForm(true);     
+                                        }}
+                                        />
+
+                                    <Trash2
+                                    className="icon delete-icon"
+                                    onClick={(e: React.MouseEvent) => {
+                                        e.stopPropagation();
+                                        handleDeleteStory(story.id); 
+                                    }}
+                                    />
+                                </div>
+                                </li>
+
                         ))}
                     </ul>
                 ) : (
@@ -101,7 +146,7 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
                     </button>
                     </h2 >
                         <div className="task-list">
-                        <TaskList userStoryId={selectedStory.id} />
+                        <TaskList userStoryId={selectedStory.id} projectId={projectId} />
                         </div>
                     {showTaskForm && (
                     <div className="modal-overlay-backlog">
