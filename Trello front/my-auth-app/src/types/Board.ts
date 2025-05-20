@@ -8,6 +8,5 @@ export interface Board {
     projectId: number,
     activeSprintId: number,
     columns: Column[]
-    //userIds: number[];  // Lista korisnika u projektu
-    //sprintIds: number[]; // Lista sprintova u projektu
+ 
 }

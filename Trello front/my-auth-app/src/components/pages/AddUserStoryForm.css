@@ -30,7 +30,7 @@
   .input-box {
     position: relative;
     width: 100%;    
-    
+    border-radius: 15px !important;
   }
   
   .input-box input {
@@ -38,7 +38,7 @@
     background: transparent;
     border: 2px solid rgba(187, 164, 178, 0.2);
     outline: none;
-    border-radius: 40px;
+    border-radius: 15px;
     font-size: 16px;
     color: black;
     height:50px;
@@ -78,10 +78,35 @@
     height: 45px;
     background: #fff;
     border: none;
-    border-radius: 40px;
+    border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .4);
     cursor: pointer;
     font-size: 16px;
     color: #333;
     margin-top: 20px;
   }
+
+  .userstory-item {
+  position: relative;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.userstory-actions {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-icon {
+}
+
+.delete-icon {
+}

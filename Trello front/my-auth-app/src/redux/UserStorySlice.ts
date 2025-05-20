@@ -3,6 +3,7 @@ import { UserStory } from "../types/UserStory";
 import { createUserStory, getById } from "../services/UserStoryService";
 import { getByBacklogId} from "../services/UserStoryService"
 import { RootState } from "./store";
+import axiosInstance from "../utils/AxiosIntance";
 interface UserStoryState {
     userStories: UserStory[];
     loading: boolean;
@@ -33,6 +34,22 @@ export const fetchUserStoriesById = createAsyncThunk(
     "userStories/fetchById",
     async (id: number) => {
         return await getById(id);
+    }
+);
+export const updateUserStory = createAsyncThunk(
+    "userStories/updateUserStory",
+    async ({ id, updatedStory }: { id: number; updatedStory: Partial<UserStory> }) => {
+        const response = await axiosInstance.put(`userStory/update/${id}`, updatedStory);
+        return response.data;
+    }
+);
+
+
+export const deleteUserStory = createAsyncThunk(
+    "userStories/deleteUserStory",
+    async (id: number) => {
+        await axiosInstance.delete(`userStory/delete/${id}`);
+        return id;
     }
 );
 
@@ -85,7 +102,24 @@ const userStorySlice = createSlice({
             .addCase(fetchUserStoriesById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || "Failed to fetch User Stories";
-            });
+            })
+            .addCase(updateUserStory.fulfilled, (state, action: PayloadAction<UserStory>) => {
+                const index = state.userStories.findIndex(us => us.id === action.payload.id);
+                if (index !== -1) {
+                    state.userStories[index] = action.payload;
+                        }
+        })
+        .addCase(updateUserStory.rejected, (state, action) => {
+            state.error = action.error.message || "Failed to update User Story";
+        })
+
+        .addCase(deleteUserStory.fulfilled, (state, action: PayloadAction<number>) => {
+            state.userStories = state.userStories.filter(us => us.id !== action.payload);
+        })
+        .addCase(deleteUserStory.rejected, (state, action) => {
+            state.error = action.error.message || "Failed to delete User Story";
+        });
+
     },
 });
 

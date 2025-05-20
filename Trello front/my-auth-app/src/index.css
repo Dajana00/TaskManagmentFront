@@ -9,7 +9,7 @@ body {
   justify-content : center;
   align-items: center;
   min-height: 100vh;
-  background: url('./assets/images/pozadina1.webp') no-repeat;
+  background: url('./assets/images/pozadina.jpeg') no-repeat;
   background-size:cover;
   background-position: center;
 }
