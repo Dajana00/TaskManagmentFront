@@ -1,0 +1,84 @@
+.sprint-page {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: -100px;
+  }
+  
+  .sprint-page h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .sprint-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  
+  .sprint-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    flex: 1 1 200px;
+  }
+  
+  .sprint-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .sprint-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  
+  .modern-table button {
+    padding: 6px 14px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .modern-table button[disabled] {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+  
+  
+  .modern-table {
+    width: 100%;
+    text-align: center; /* centriranje za sve ćelije */
+  }
+  
+
+  .modern-table td {
+    padding: 12px;
+    text-align: center; /* centriranje teksta u kolonama */
+    vertical-align: middle; /* vertikalno centriranje */
+  }
+  
+  .modern-table th{
+    padding: 12px !important;
+    text-align: center  !important; /* centriranje teksta u kolonama */
+    vertical-align: middle  !important;
+  }
+  .error {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  

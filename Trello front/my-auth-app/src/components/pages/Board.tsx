@@ -3,35 +3,36 @@ import "./Board.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchBoardById } from "../../redux/BoardSlice";
-//import { moveCard } from "../../redux/CardSlice";
 import ColumnComponent from "../pages/Column";
-import {Column} from '../../types/Column'
 import { Card, Status } from "../../types/Card";
-import { fetchAllCards, moveCardToNewColumn, setCards } from "../../redux/CardSlice";
-import { getAll } from "../../services/CardService";
+import {  moveCardToNewColumn, resetCards, setCards } from "../../redux/CardSlice";
+import { getByBoardId } from "../../services/CardService";
+import { completeSprintByBoardId } from "../../redux/SprintSlice";
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
+
 
 interface BoardProps {
   boardId: number;
+  projectId: number;
 }
 
-const Board: React.FC<BoardProps> = ({ boardId }) => {
+const Board: React.FC<BoardProps> = ({ boardId , projectId}) => {
   const dispatch = useDispatch<AppDispatch>();
-  const board = useSelector((state: RootState) => state.board.board);
-  const status = useSelector((state: RootState) => state.board.status);
+  const cards = useSelector((state: RootState) => state.card.cards); 
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const [columns, setColumns] = useState(board?.columns || []);
 
   useEffect(() => {
     dispatch(fetchBoardById(boardId));
+
   }, [dispatch, boardId]);
 
-
-  const cards = useSelector((state: RootState) => state.card.cards); // Pristupanje karticama iz Redux-a
-
+  
    useEffect(() => {
         const fetchAllCards = async () => {
+          dispatch(resetCards(cards));
             try {
-                const stories = await getAll();
+                const stories = await getByBoardId(boardId);
                 console.log("ucitane kartice ", stories);
                 dispatch(setCards(stories)); 
             } catch (err) {
@@ -40,7 +41,7 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
         };
     
         fetchAllCards();
-    }, [ dispatch]);
+    }, [dispatch, boardId]);
     
   const statuses: Status[] = [
     Status.ToDo,
@@ -52,37 +53,72 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
   const getCardsByStatus = (status: Status): Card[] => {
     console.log("Usao u metodu filer, ", status);
     console.log("cards: ",cards);
+    if (!cards || cards.length === 0) {
+      return []; 
+    }
     return cards.filter((card) => card.status === status);
   };
-  const handleCardDrop = (cardId: number, newColumnStatus: string) => {
-    console.log("Prosledeni new status ", newColumnStatus);
-    const statusMap: { [key: string]: Status } = {
-      ToDo: Status.ToDo,
-      InProgress: Status.InProgress,
-      QA: Status.QA,
-      Done: Status.Done,
-    };
+  const handleCardDrop = (cardId: number, newStatus: string) => {
   
-    const status = statusMap[newColumnStatus]; // Mapiramo naziv kolone na Status
-  console.log()
-    if (status) {
-
-      dispatch(moveCardToNewColumn({ cardId, status })) // Poslali smo pravi tip Status umesto stringa
+  console.log("Pretvoreni status iz strina u status: ", newStatus);
+      dispatch(moveCardToNewColumn({ cardId, newStatus})) 
         .unwrap()
         .then(() => {
           console.log("Kartica premestena u novu kolonu!");
+          
         })
         .catch((err) => {
           console.error("Greška pri premještanju kartice: ", err);
         });
-    } else {
-      console.error("Nevažeći status: ", newColumnStatus);
-    }
+   
   };
   
+  const completeSprintHandler = () => {
+    dispatch(completeSprintByBoardId(boardId)) 
+      .unwrap()
+      .then(() => {
+         dispatch(resetCards(cards));
+        console.log("Sprint uspešno završen!");
+      })
+      .catch((err) => {
+        let message = "Unexpected error occurred while completing the sprint.";
+      
+        // Ako err ima .message
+        if (typeof err === "object" && err?.message) {
+          message = err.message;
+        } else if (typeof err === "string") {
+          // Pokušaj da izvučeš 'poruku' iz stringa ako je formatovan kao "Exception: Message='Some text'"
+          const match = err.match(/Message='([^']+)'/);
+          if (match && match[1]) {
+            alert(match[1]);
+            //message = match[1];
+          } else {
+           // message = err;
+          }
+        }
+      
+        //setErrorMessage(message);
+      });
+      
+  };
   
-  return (
+  return (<div>
+ <div className="sprint-header">
+  <div className="spacer" />
+  
+  <h2 className="sprint-title">Active sprint</h2>
+  <button className="complete-sprint-btn" onClick={completeSprintHandler}>Complete
+    <IoCheckmarkDoneSharp  className="icon-style"/>
+
+  </button>
+</div>
+
+
+  {errorMessage && <p className="error">{errorMessage}</p>}
+
+    
         <div className="board">
+
     {statuses.map((status) => (
         <ColumnComponent
         key={status}
@@ -91,11 +127,11 @@ const Board: React.FC<BoardProps> = ({ boardId }) => {
             name: status,
             cards: getCardsByStatus(status),
         }}
-        onCardDrop={handleCardDrop}
+        onCardDrop={handleCardDrop} projectId={projectId}
         />
     ))}
     </div>
-
+</div>
   );
 };
 

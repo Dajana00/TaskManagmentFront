@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Project } from "../../types/Project";
 import "./Sidebar.css"; 
+import { FaUserCircle } from "react-icons/fa";
 
 interface SidebarProps {
     projects: Project[];
@@ -9,8 +10,11 @@ interface SidebarProps {
     setNewProjectName: (name: string) => void;
     setCreatingProject: (creating: boolean) => void;
     handleCreateProject: () => void;
-    openBoard: (projectId: number) => void;
-    openBacklog: (projectId: number) => void;
+    openBoard: (project: Project) => void;
+    openBacklog: (project: Project) => void;
+    openSprints: (project: Project) => void;
+    openMembers: (project: Project) => void;
+    openProfile: () => void;
 
 }
 
@@ -22,7 +26,10 @@ const Sidebar: React.FC<SidebarProps> = ({
     setCreatingProject,
     handleCreateProject,
     openBoard,
-    openBacklog
+    openBacklog,
+    openSprints,
+    openMembers,
+    openProfile
 }) => {
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
@@ -32,7 +39,13 @@ const Sidebar: React.FC<SidebarProps> = ({
 
     return (
         <div className="sidebar">
-            <h3>Your Projects</h3>
+
+            <div className="sidebar-profile" onClick={openProfile}>
+            <FaUserCircle className="profile-icon" />
+            <span >Profile</span>
+            </div>
+
+            <h3>Workspace</h3>
             {/* Create Project Button */}
             {!creatingProject ? (
                 <button onClick={() => setCreatingProject(true)} className="create-project-btn">
@@ -67,11 +80,17 @@ const Sidebar: React.FC<SidebarProps> = ({
 
                         {openDropdown === project.id && (
                             <><div className="dropdown-menu">
-                                <button onClick={() => openBoard(project.boardId)}>Board</button>
-                            </div><div className="dropdown-menu">
-                            
-                                    <button onClick={() => openBacklog(project.backlogId)}>Backlog</button>
-                                </div></>
+                                <button onClick={() => openBoard(project)}>Board</button>
+                            </div>
+                            <div className="dropdown-menu">
+                             <button onClick={() => openBacklog(project)}>Backlog</button>
+                            </div>
+                            <div className="dropdown-menu">
+                             <button onClick={() => openSprints(project)}>Sprints</button>
+                            </div>
+                            <div className="dropdown-menu">
+                             <button onClick={() => openMembers(project)}>Members</button>
+                            </div></>
                         )}
                     </li>
                 ))}

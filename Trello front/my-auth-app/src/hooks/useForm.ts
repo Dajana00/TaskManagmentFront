@@ -8,12 +8,10 @@ export const useForm = <T extends Record<string, any>>(
   const [errors, setErrors] = useState<Partial<T>>({});
   const [touchedFields, setTouchedFields] = useState<Partial<Record<keyof T, boolean>>>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     setValues({ ...values, [name]: value });
-
-    // Set touched field to true when user starts typing
     setTouchedFields({ ...touchedFields, [name]: true });
 
     if (validate) {

@@ -1,0 +1,112 @@
+.wrapper-add-userStory {
+    background: white;
+    backdrop-filter: blur(30px) !important;
+    color: #fff;
+    border-radius: 10px;
+    padding: 30px 40px;
+   box-shadow: 0 0 10px rgba(0,0,0, .2);
+    height:550px;
+    position:relative;
+  }
+  .close-modal-inside {
+    position: absolute; /* Pozicioniraj dugme u odnosu na .wrapper-add-userStory */
+    top: 10px; /* Razmak od gornjeg ivice */
+    right: 10px; /* Razmak od desne ivice */
+    background: transparent;
+    border: none;
+    color: black;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+  }
+.wrapper-add-userStory  h2{
+    color:black !important;
+  }
+  .form-backlog{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .input-box {
+    position: relative;
+    width: 100%;    
+    border-radius: 15px !important;
+  }
+  
+  .input-box input {
+    width: 100%;
+    background: transparent;
+    border: 2px solid rgba(187, 164, 178, 0.2);
+    outline: none;
+    border-radius: 15px;
+    font-size: 16px;
+    color: black;
+    height:50px;
+    margin-top:20px;
+    margin-button:20px;
+    padding: 20px;
+    font-family: 'Arial', sans-serif; 
+  }
+  
+  .input-box input::placeholder,
+  .textarea-field::placeholder {
+    color:black;
+  }
+  
+  .textarea-field {
+    height: 200px;
+    padding: 20px;
+    resize: none;
+     color: black;
+    font-family: 'Arial', sans-serif; 
+    border: 2px solid rgba(187, 164, 178, 0.2);
+  }
+  
+  .form-spacer {
+    flex-grow: 1;
+  }
+  
+ 
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .wrapper-add-userStory-button{
+    width: 100%;
+    height: 45px;
+    background: #fff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    margin-top: 20px;
+  }
+
+  .userstory-item {
+  position: relative;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.userstory-actions {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-icon {
+}
+
+.delete-icon {
+}

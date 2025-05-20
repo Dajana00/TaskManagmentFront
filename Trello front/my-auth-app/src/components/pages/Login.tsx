@@ -50,32 +50,50 @@ const Login: React.FC = () => {
 
   return (
   
-    <div className="wrapper">
-      <h1 >Login</h1>
-      {serverError && <p className="error-message">{serverError}</p>}
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="input-box">
-        <InputField label="" type="text" placeholder="Username" name="username" value={values.username} error={errors.username} onChange={handleChange} />
-        <FaUser className="icon"/>
-        </div>
-        <div className="input-box">
-        <InputField label="" type="password" placeholder="Password" name="password" value={values.password} error={errors.password} onChange={handleChange} />
-        <FaLock className="icon" />
-        </div>
-        <button 
-          type="submit" 
-          disabled={loading || !!errors.username || !!errors.password}
-          className={`button ${loading ? "disabled" : ""}`}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      <div className="register-link">
-       <p> Don't have an account?    
-        <a href="/signup"> Register</a></p>
-      </div>
-      
+    <div className="auth-wrapper">
+  <h1>Login</h1>
+  {serverError && <p className="auth-error-message">{serverError}</p>}
+  <form onSubmit={handleSubmit} className="auth-container">
+    <div className="auth-input-box">
+      <InputField
+        label=""
+        type="text"
+        placeholder="Username"
+        name="username"
+        value={values.username}
+        error={errors.username}
+        onChange={handleChange}
+      />
+      <FaUser className="auth-icon" />
     </div>
+    <div className="auth-input-box">
+      <InputField
+        label=""
+        type="password"
+        placeholder="Password"
+        name="password"
+        value={values.password}
+        error={errors.password}
+        onChange={handleChange}
+      />
+      <FaLock className="auth-icon" />
+    </div>
+    <div className="space"></div>
+    <button
+      type="submit"
+      disabled={loading || !!errors.username || !!errors.password}
+      className={`auth-button ${loading ? "disabled" : ""}`}
+    >
+      {loading ? "Logging in..." : "Login"}
+    </button>
+  </form>
+  <div className="auth-register-link">
+    <p>
+      Don't have an account?
+      <a href="/signup"> Register</a>
+    </p>
+  </div>
+</div>
 
   
   );

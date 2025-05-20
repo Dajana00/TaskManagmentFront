@@ -5,30 +5,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 
 .board {
     display: flex;
     gap: 15px; /* Razmak između kolona */
-    width: 100%;
-    max-width: 1200px;
+    width: 110%;
     overflow-x: auto;
 }
 .h2{
     margin-bottom: 20px;
-    
+    font-align:relative;
 }
+.h1-style{
+    font-size: 30px;
+    color: #333;
+    margin-left: 350px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.board-container h1{
+    font-size: 28px;
+    color: #333;
+  }
 .board-column {
     flex: 1;
-    min-width: 250px;
+    width: 260px;
     background-color: rgb(240, 241, 241);;
     backdrop-filter: blur(60px);
     border-radius: 8px;
-    padding: 10px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    height: 80vh; /* Ograničena visina */
+    height: 75vh; /* Ograničena visina */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top:120px;
 }
 
 .board-column h3 {
@@ -45,4 +56,58 @@
     padding: 5px;
     overflow-y: auto; /* Omogućava skrolovanje ako ima puno taskova */
     min-height: 50px;
+}
+.completeSprintButton{
+        width:120px;
+        height: 45px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+        cursor: pointer;
+        font-size: 12px;
+        color: white;
+        margin-top:-15px;
+        padding: 0.5rem 1rem;
+}
+
+.sprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  
+  .spacer {
+    width: 100px; /* isto kao dugme */
+  }
+  
+  .sprint-title {
+    text-align: center;
+    //flex-grow: 1;
+    font-size: 35px;
+    margin: 0;
+    margin-top: 10px;
+  }
+  
+  .complete-sprint-btn {
+    width: 130px;
+    height: 45px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight:bold;
+    color: white;
+  }
+  .complete-sprint-btn:hover{
+    background-color:rgb(9, 104, 205);
+  }
+  .icon-style {
+  font-size: 1.2rem; /* ili npr. 24px, 2rem, koliko god želiš */
+  margin-left: 0.5rem; /* ako želiš razmak između teksta i ikonice */
+  vertical-align: middle; /* poravnanje sa tekstom */
+  margin-bottom:3px;
 }

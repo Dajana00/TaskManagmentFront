@@ -1,52 +1,54 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { addUserStory, setUserStories } from "../../redux/UserStorySlice";
+import { setUserStories , resetUserStories, deleteUserStory} from "../../redux/UserStorySlice";
 import { UserStory } from "../../types/UserStory";
-import { useForm } from "../../hooks/useForm";
-import InputField from "../common/InputField";
 import './Backlog.css';
 import { getByBacklogId } from "../../services/UserStoryService";
+import TaskList from "./TaskList";
+import TaskForm from "./TaskForm";
+import AddUserStoryForm from "./AddUserStoryForm";
+import { FaPlus } from "react-icons/fa";
+import { Pencil, Trash2 } from "lucide-react";
+
 
 interface BacklogProps {
     backlogId: number;
+    projectId:number;
 }
 
-const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
+const Backlog: React.FC<BacklogProps> = ({ backlogId , projectId}) => {
     const dispatch = useDispatch<AppDispatch>();
-    const { userStories, loading, error } = useSelector((state: RootState) => state.userStory);
+    const { userStories } = useSelector((state: RootState) => state.userStory);
+    const [selectedStory, setSelectedStory] = useState<UserStory | null>(null);
+    const [showTaskForm, setShowTaskForm] = useState(false); 
+    const [showForm, setShowForm] = useState(false);
+    const [storyToEdit, setStoryToEdit] = useState<UserStory | null>(null);
 
-    const initialState = {
-        title: "",
-        description: "",
-    };
 
-    const validate = (values: typeof initialState) => {
-        let errors: Partial<typeof initialState> = {};
-        if (!values.title.trim()) errors.title = "Title is required";
-        if (!values.description.trim()) errors.description = "Description is required";
-        return errors;
-    };
-
-    const { values, handleChange, handleSubmit, errors, touchedFields } = useForm(initialState, validate);
-
-    const onSubmit = () => {
-        const newStory: Omit<UserStory, "id"> = {
-            title: values.title,
-            description: values.description,
-            backlogId,
-        };
-
-        dispatch(addUserStory(newStory));
-        values.title = "";
-        values.description = "";
-    };
+const handleDeleteStory = async (storyId: number) => {
+  try {
+    await dispatch(deleteUserStory(storyId)).unwrap();
+    const updatedStories = await getByBacklogId(backlogId);
+    dispatch(setUserStories(updatedStories));
+    if (selectedStory?.id === storyId) {
+      setSelectedStory(null);
+    }
+  } catch (error) {
+    console.error("Greška pri brisanju:", error);
+  }
+};
+    useEffect(() => {
+        setShowTaskForm(false); 
+      }, [selectedStory]);
+      
 
     useEffect(() => {
         const fetchUserStories = async () => {
             try {
+                dispatch(resetUserStories());
                 const stories = await getByBacklogId(backlogId);
-                dispatch(setUserStories(stories)); // <-- postavi ih u Redux
+                dispatch(setUserStories(stories));
             } catch (err) {
                 console.error("Failed to fetch stories", err);
             }
@@ -56,59 +58,108 @@ const Backlog: React.FC<BacklogProps> = ({ backlogId }) => {
     }, [backlogId, dispatch]);
     
     return (
-        <div>
-        <div className="wrapper">
-            <div className="form-wrapper">
-                <h2>Add User Story</h2>
-                <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-                    <div className="input-box">
-                        <InputField
-                            label=""
-                            type="text"
-                            name="title"
-                            value={values.title}
-                            placeholder="Title"
-                            error={touchedFields.title && errors.title ? errors.title : undefined}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="input-box">
-                        <InputField
-                            label=""
-                            type="text"
-                            name="description"
-                            value={values.description}
-                            placeholder="Description"
-                            error={touchedFields.description && errors.description ? errors.description : undefined}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <button type="submit" disabled={loading}>
-                        {loading ? "Adding..." : "Add User Story"}
-                    </button>
-                    {error && <p className="error-text">{error}</p>}
-                </form>
+        <div className="flexbox-container">
+       
+            {showForm && (
+            <div className="modal-overlay-backlog ">
+                <div className="modal-content-backlog">
+                    <AddUserStoryForm
+                    backlogId={backlogId}
+                    storyToEdit={storyToEdit}
+                    onClose={() => {
+                        setShowForm(false);
+                        setStoryToEdit(null);
+                    }}
+                    />
+                                   </div>
             </div>
+            )}
+
+    
+        {/* Lista user story-ja */}
+        <div className="userstory-section">
+            <div className="userstory-list">
+            <div className="userstory-header">
+
+                <h1>User stories    
+
+                <button
+                    onClick={() => setShowForm((prev) => !prev)}
+                   className="show-task-form-btn"
+                >
+                    {showForm ? "Close Form" : ""}
+                    <FaPlus className="plus-icon"></FaPlus>
+                 </button>
+                </h1>
+                </div>
+                <div className="userstory-scrollable">
+                {Array.isArray(userStories) && userStories.length > 0 ? (
+                    <ul>
+                        {userStories.map((story) => (
+                         <li
+                                key={story.id}
+                                className={`userstory-item ${selectedStory?.id === story.id ? "selected" : ""}`}
+                                >
+                                <div onClick={() => setSelectedStory(story)} className="userstory-content">
+                                    <strong>{story.title}</strong> {story.description}
+                                </div>
+
+                                <div className="userstory-actions">
+                                    <Pencil
+                                        className="icon edit-icon"
+                                        onClick={(e: React.MouseEvent) => {
+                                            e.stopPropagation();
+                                            setStoryToEdit(story);
+                                            setShowForm(true);     
+                                        }}
+                                        />
+
+                                    <Trash2
+                                    className="icon delete-icon"
+                                    onClick={(e: React.MouseEvent) => {
+                                        e.stopPropagation();
+                                        handleDeleteStory(story.id); 
+                                    }}
+                                    />
+                                </div>
+                                </li>
+
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No user stories yet.</p>
+                )}
+                </div>
+            </div>
+    
+            {selectedStory && (
+            <div className="task-panel">
+                    
+
+                    <h2 className="h2-backlog">Tasks 
+                    <button
+                    className="show-task-form-btn"
+                    onClick={() => setShowTaskForm(true)}
+                    >
+                     
+                    <FaPlus className="plus-icon"/>
+                    </button>
+                    </h2 >
+                        <div className="task-list">
+                        <TaskList userStoryId={selectedStory.id} projectId={projectId} />
+                        </div>
+                    {showTaskForm && (
+                    <div className="modal-overlay-backlog">
+                        <div className="modal-content-backlog">
+                          <TaskForm userStoryId={selectedStory.id} onClose={() => setShowTaskForm(false)} />
+                        </div>
+                    </div>
+                    )}
+            </div>
+            )}
+
         </div>
-
-
-        <div className="userstory-list">
-        <h3>User Stories</h3>
-        {Array.isArray(userStories) && userStories.length > 0 ? (
-            <ul>
-                {userStories.map((story) => (
-                    <li key={story.id}>
-                        <strong>{story.title}</strong>: {story.description}
-                    </li>
-                ))}
-            </ul>
-        ) : (
-            <p>No user stories yet.</p>
-        )}
-</div>
-</div>
-
-        
+    </div> 
     );
 };
 
